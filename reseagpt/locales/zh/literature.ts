@@ -1,0 +1,15 @@
+export default {
+  'literature.title': '文献库',
+  'literature.subtitle': '汇聚计算机领域顶级论文与技术文档，辅助学术研究',
+  'literature.coming_soon': '功能开发中',
+  'literature.search.placeholder': '搜索论文、技术文档、关键词…',
+  'literature.filter.all': '全部',
+  'literature.filter.algorithms': '算法',
+  'literature.filter.systems': '系统',
+  'literature.filter.ai': 'AI/ML',
+  'literature.filter.network': '网络',
+  'literature.filter.security': '安全',
+  'literature.read': '阅读',
+  'literature.save': '收藏',
+  'literature.coming': '即将上线',
+} as const;

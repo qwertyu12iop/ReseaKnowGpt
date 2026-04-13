@@ -1,0 +1,15 @@
+export default {
+  'literature.title': 'Literature',
+  'literature.subtitle': 'Top CS papers and technical docs for academic research',
+  'literature.coming_soon': 'In Development',
+  'literature.search.placeholder': 'Search papers, docs, keywords...',
+  'literature.filter.all': 'All',
+  'literature.filter.algorithms': 'Algorithms',
+  'literature.filter.systems': 'Systems',
+  'literature.filter.ai': 'AI/ML',
+  'literature.filter.network': 'Network',
+  'literature.filter.security': 'Security',
+  'literature.read': 'Read',
+  'literature.save': 'Save',
+  'literature.coming': 'Coming Soon',
+} as const;
