@@ -7,3 +7,7 @@ node_modules/
 out/
 .env*
 *.tsbuildinfo
+
+# 仅使用 pnpm，禁止其他 lock 文件
+package-lock.json
+yarn.lock

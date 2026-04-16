@@ -1,8 +1,8 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ── Dark theme (default) ── */
 :root,
-[data-theme="dark"] {
+[data-theme='dark'] {
   --sidebar-bg: #161b27;
   --sidebar-hover: #1e2536;
   --sidebar-active: #1e2c5a;
@@ -23,7 +23,7 @@
 }
 
 /* ── Light theme ── */
-[data-theme="light"] {
+[data-theme='light'] {
   --sidebar-bg: #f5f6fa;
   --sidebar-hover: #eaecf2;
   --sidebar-active: #e0e4ff;
@@ -36,7 +36,7 @@
   --text-muted: #94a3b8;
   --accent: #6366f1;
   --accent-hover: #4f46e5;
-  --accent-light: rgba(99, 102, 241, 0.10);
+  --accent-light: rgba(99, 102, 241, 0.1);
   --scrollbar-thumb: #cbd5e1;
   --card-bg: #ffffff;
   --card-hover: #f1f5f9;
@@ -58,8 +58,14 @@ body {
 body {
   background: var(--chat-bg);
   color: var(--text-primary);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Helvetica, Arial, sans-serif;
+  font-family:
+    var(--font-geist-sans),
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Helvetica,
+    Arial,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -92,7 +98,9 @@ textarea:focus {
 
 /* Smooth theme transitions */
 :root {
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 /* ── Markdown bubble prose styles ── */
@@ -102,8 +110,12 @@ textarea:focus {
 .prose-bubble p {
   margin: 0.45em 0;
 }
-.prose-bubble p:first-child { margin-top: 0; }
-.prose-bubble p:last-child  { margin-bottom: 0; }
+.prose-bubble p:first-child {
+  margin-top: 0;
+}
+.prose-bubble p:last-child {
+  margin-bottom: 0;
+}
 
 .prose-bubble h1,
 .prose-bubble h2,
@@ -114,16 +126,24 @@ textarea:focus {
   margin: 1em 0 0.4em;
   color: var(--text-primary);
 }
-.prose-bubble h1 { font-size: 1.2em; }
-.prose-bubble h2 { font-size: 1.1em; }
-.prose-bubble h3 { font-size: 1em;   }
+.prose-bubble h1 {
+  font-size: 1.2em;
+}
+.prose-bubble h2 {
+  font-size: 1.1em;
+}
+.prose-bubble h3 {
+  font-size: 1em;
+}
 
 .prose-bubble ul,
 .prose-bubble ol {
   padding-left: 1.4em;
   margin: 0.4em 0;
 }
-.prose-bubble li { margin: 0.2em 0; }
+.prose-bubble li {
+  margin: 0.2em 0;
+}
 
 .prose-bubble hr {
   border: none;
@@ -131,5 +151,9 @@ textarea:focus {
   margin: 0.8em 0;
 }
 
-.prose-bubble strong { color: var(--text-primary); }
-.prose-bubble em     { color: var(--text-secondary); }
+.prose-bubble strong {
+  color: var(--text-primary);
+}
+.prose-bubble em {
+  color: var(--text-secondary);
+}

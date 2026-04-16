@@ -11,4 +11,4 @@ export default {
   'profile.no_activity': '暂无对话记录',
   'profile.interests': '技术方向',
   'profile.learning': '学习进度',
-} as const;
+} as const

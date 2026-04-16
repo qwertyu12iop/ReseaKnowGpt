@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
-import { ChatMode } from '@/types/chat';
-import { useI18n } from '@/contexts/I18nContext';
+import { ChatMode } from '@/types/chat'
+import { useI18n } from '@/contexts/I18nContext'
 
 interface WelcomeScreenProps {
-  mode: ChatMode;
-  onPromptClick: (prompt: string) => void;
+  mode: ChatMode
+  onPromptClick: (prompt: string) => void
 }
 
 const PROMPTS = {
@@ -37,17 +37,26 @@ const PROMPTS = {
       'Kubernetes Pod scheduling and affinity configuration',
     ],
   },
-};
+}
 
 export default function WelcomeScreen({ mode, onPromptClick }: WelcomeScreenProps) {
-  const { t, locale } = useI18n();
-  const isTheory = mode === 'theory';
-  const prompts = PROMPTS[mode][locale];
+  const { t, locale } = useI18n()
+  const isTheory = mode === 'theory'
+  const prompts = PROMPTS[mode][locale]
 
   return (
     <div className="flex flex-col items-center justify-center h-full px-4 py-8 text-center">
       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-[var(--shadow-accent)]">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
       </div>
@@ -59,11 +68,13 @@ export default function WelcomeScreen({ mode, onPromptClick }: WelcomeScreenProp
         {t('chat.welcome.subtitle')}
       </p>
 
-      <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium mb-8 ${
-        isTheory
-          ? 'bg-indigo-500/12 text-indigo-400 border border-indigo-500/25'
-          : 'bg-emerald-500/12 text-emerald-400 border border-emerald-500/25'
-      }`}>
+      <div
+        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium mb-8 ${
+          isTheory
+            ? 'bg-indigo-500/12 text-indigo-400 border border-indigo-500/25'
+            : 'bg-emerald-500/12 text-emerald-400 border border-emerald-500/25'
+        }`}
+      >
         <span className="w-1.5 h-1.5 rounded-full bg-current" />
         {isTheory ? t('chat.welcome.theory_mode') : t('chat.welcome.technical_mode')}
       </div>
@@ -76,12 +87,14 @@ export default function WelcomeScreen({ mode, onPromptClick }: WelcomeScreenProp
             className="text-left px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-[var(--card-hover)] hover:border-[var(--accent)]/40 text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm transition-all duration-200 group"
           >
             <span className="line-clamp-2 leading-relaxed">{prompt}</span>
-            <span className={`block text-[11px] mt-1 font-medium opacity-0 group-hover:opacity-100 transition-opacity ${isTheory ? 'text-indigo-400' : 'text-emerald-400'}`}>
+            <span
+              className={`block text-[11px] mt-1 font-medium opacity-0 group-hover:opacity-100 transition-opacity ${isTheory ? 'text-indigo-400' : 'text-emerald-400'}`}
+            >
               {t('chat.click_to_ask')}
             </span>
           </button>
         ))}
       </div>
     </div>
-  );
+  )
 }

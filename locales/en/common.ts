@@ -16,4 +16,4 @@ export default {
   'common.back': 'Back',
   'common.confirm': 'Confirm',
   'common.cancel': 'Cancel',
-} as const;
+} as const

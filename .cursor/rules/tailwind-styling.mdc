@@ -1,0 +1,36 @@
+---
+description: Tailwind CSS 样式规范
+globs: "**/*.{tsx,css}"
+alwaysApply: false
+---
+
+# Tailwind CSS 规范
+
+## 基本原则
+
+- 使用 Tailwind v4 原子类，避免自定义 CSS（除非主题变量）
+- 主题色通过 CSS 变量定义在 `globals.css`，组件中用 `var(--xxx)` 引用
+- 响应式设计：mobile-first，使用 `sm:` `md:` `lg:` 断点
+- 暗色模式使用 `dark:` 前缀
+
+## 类名顺序
+
+按功能分组：布局 → 尺寸 → 间距 → 排版 → 颜色 → 边框 → 效果 → 响应式
+
+```tsx
+// ✅
+<div className="flex items-center gap-4 w-full p-4 text-sm text-gray-700 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow" />
+```
+
+## 长类名
+
+类名超过 3 个断点时，使用模板字符串换行或提取为变量：
+
+```tsx
+const cardClass = [
+  'flex flex-col gap-3 p-4',
+  'bg-white dark:bg-gray-800',
+  'rounded-xl shadow-sm',
+  'hover:shadow-md transition-shadow',
+].join(' ')
+```

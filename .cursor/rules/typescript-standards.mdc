@@ -1,0 +1,54 @@
+---
+description: TypeScript 编码规范
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# TypeScript 规范
+
+## 类型定义
+
+- 优先使用 `interface` 定义对象类型，`type` 用于联合类型 / 工具类型
+- 禁止使用 `any`，必要时用 `unknown` 并做类型守卫
+- Props 类型命名：`组件名Props`（如 `ChatInputProps`）
+- API 响应类型统一放在 `types/` 目录
+
+```typescript
+// ✅
+interface ChatMessage {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  createdAt: Date
+}
+
+// ❌
+type ChatMessage = {
+  id: any
+  role: string
+  content: string
+}
+```
+
+## 错误处理
+
+```typescript
+// ✅
+try {
+  const data = await fetchData()
+  return data
+} catch (error) {
+  console.error('Failed to fetch data:', error)
+  throw new Error('数据获取失败', { cause: error })
+}
+
+// ❌
+try {
+  const data = await fetchData()
+} catch (e) {}
+```
+
+## 异步代码
+
+- 使用 `async/await`，避免 `.then()` 链
+- 并行请求使用 `Promise.all` / `Promise.allSettled`

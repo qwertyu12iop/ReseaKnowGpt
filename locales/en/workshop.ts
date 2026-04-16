@@ -7,4 +7,4 @@ export default {
   'workshop.review': 'Code Reviewer',
   'workshop.docs': 'Doc Generator',
   'workshop.coze_powered': 'Powered by Coze Workflow',
-} as const;
+} as const

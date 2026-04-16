@@ -1,0 +1,36 @@
+---
+description: 国际化（i18n）约定
+globs: "locales/**/*.ts"
+alwaysApply: false
+---
+
+# 国际化约定
+
+## 文案管理
+
+- 所有用户可见文案必须走 `t('key')` 函数
+- 翻译 key 使用 `模块.功能.描述` 格式（如 `chat.input.placeholder`）
+- 新增文案必须同时更新 `locales/zh/` 和 `locales/en/` 对应模块
+- 禁止在组件中硬编码中英文文案
+
+## 文件结构
+
+```
+locales/
+  zh/
+    common.ts    → 通用文案
+    chat.ts      → 聊天模块
+    literature.ts → 文献模块
+    workshop.ts  → 代码小工房
+    profile.ts   → 个人中心
+  en/
+    (同上结构)
+  index.ts       → 合并导出
+```
+
+## 使用方式
+
+```tsx
+const { t } = useI18n()
+return <p>{t('chat.welcome')}</p>
+```

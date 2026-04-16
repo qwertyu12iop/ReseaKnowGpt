@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { useI18n } from '@/contexts/I18nContext';
+import { useState } from 'react'
+import { useI18n } from '@/contexts/I18nContext'
 
 const PAPERS = [
   {
@@ -11,7 +11,8 @@ const PAPERS = [
     venue: 'NeurIPS',
     tags: ['AI/ML', 'Transformer', 'NLP'],
     abstract: '提出了 Transformer 架构，完全基于注意力机制，彻底改变了 NLP 领域。',
-    abstractEn: 'Proposed the Transformer architecture based solely on attention mechanisms, revolutionizing NLP.',
+    abstractEn:
+      'Proposed the Transformer architecture based solely on attention mechanisms, revolutionizing NLP.',
     category: 'ai',
   },
   {
@@ -21,17 +22,19 @@ const PAPERS = [
     venue: 'OSDI',
     tags: ['Systems', 'Distributed', 'Big Data'],
     abstract: 'Google 提出的大规模并行数据处理编程模型，奠定了大数据处理基础。',
-    abstractEn: "Google's programming model for large-scale parallel data processing, foundational to big data.",
+    abstractEn:
+      "Google's programming model for large-scale parallel data processing, foundational to big data.",
     category: 'systems',
   },
   {
-    title: 'Dynamo: Amazon\'s Highly Available Key-value Store',
+    title: "Dynamo: Amazon's Highly Available Key-value Store",
     authors: 'DeCandia et al.',
     year: 2007,
     venue: 'SOSP',
     tags: ['Systems', 'Distributed', 'Database'],
     abstract: 'Amazon 设计的高可用键值存储系统，介绍了最终一致性和一致性哈希。',
-    abstractEn: "Amazon's highly available key-value store introducing eventual consistency and consistent hashing.",
+    abstractEn:
+      "Amazon's highly available key-value store introducing eventual consistency and consistent hashing.",
     category: 'systems',
   },
   {
@@ -41,7 +44,8 @@ const PAPERS = [
     venue: 'CVPR',
     tags: ['AI/ML', 'Deep Learning', 'Computer Vision'],
     abstract: '提出残差网络 ResNet，通过跳跃连接解决深度神经网络的退化问题。',
-    abstractEn: 'Proposed ResNet with skip connections to solve the degradation problem in deep neural networks.',
+    abstractEn:
+      'Proposed ResNet with skip connections to solve the degradation problem in deep neural networks.',
     category: 'ai',
   },
   {
@@ -51,7 +55,8 @@ const PAPERS = [
     venue: 'Cryptography Mailing List',
     tags: ['Security', 'Blockchain', 'Cryptography'],
     abstract: '比特币白皮书，描述了去中心化电子货币系统和区块链技术。',
-    abstractEn: 'The Bitcoin whitepaper describing a decentralized electronic cash system using blockchain.',
+    abstractEn:
+      'The Bitcoin whitepaper describing a decentralized electronic cash system using blockchain.',
     category: 'security',
   },
   {
@@ -61,10 +66,11 @@ const PAPERS = [
     venue: 'SOSP',
     tags: ['Systems', 'Distributed', 'Storage'],
     abstract: 'Google 分布式文件系统 GFS 的设计论文，影响了现代分布式存储系统。',
-    abstractEn: "Design paper for Google's distributed file system GFS, influencing modern distributed storage.",
+    abstractEn:
+      "Design paper for Google's distributed file system GFS, influencing modern distributed storage.",
     category: 'systems',
   },
-];
+]
 
 const CATEGORIES = [
   { key: 'all', labelZh: '全部', labelEn: 'All' },
@@ -73,22 +79,22 @@ const CATEGORIES = [
   { key: 'algorithms', labelZh: '算法', labelEn: 'Algorithms' },
   { key: 'network', labelZh: '网络', labelEn: 'Network' },
   { key: 'security', labelZh: '安全', labelEn: 'Security' },
-];
+]
 
 export default function LiteraturePage() {
-  const { t, locale } = useI18n();
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [search, setSearch] = useState('');
+  const { t, locale } = useI18n()
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [search, setSearch] = useState('')
 
   const filtered = PAPERS.filter((p) => {
-    const matchCat = activeCategory === 'all' || p.category === activeCategory;
+    const matchCat = activeCategory === 'all' || p.category === activeCategory
     const matchSearch =
       !search ||
       p.title.toLowerCase().includes(search.toLowerCase()) ||
       p.authors.toLowerCase().includes(search.toLowerCase()) ||
-      p.tags.some((tag) => tag.toLowerCase().includes(search.toLowerCase()));
-    return matchCat && matchSearch;
-  });
+      p.tags.some((tag) => tag.toLowerCase().includes(search.toLowerCase()))
+    return matchCat && matchSearch
+  })
 
   return (
     <div className="h-full overflow-y-auto bg-[var(--chat-bg)]">
@@ -97,13 +103,24 @@ export default function LiteraturePage() {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow shadow-blue-500/20">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
                 <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-[var(--text-primary)]">{t('literature.title')}</h1>
+              <h1 className="text-xl font-bold text-[var(--text-primary)]">
+                {t('literature.title')}
+              </h1>
               <p className="text-xs text-[var(--text-muted)]">{t('literature.subtitle')}</p>
             </div>
             <span className="ml-auto px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/15 text-amber-400 border border-amber-500/25">
@@ -113,8 +130,19 @@ export default function LiteraturePage() {
 
           {/* Search */}
           <div className="relative mt-4">
-            <svg className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+            <svg
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <input
               type="text"
@@ -170,15 +198,24 @@ export default function LiteraturePage() {
                 </p>
                 <div className="flex items-center gap-2 flex-wrap">
                   {paper.tags.map((tag) => (
-                    <span key={tag} className="px-2 py-0.5 rounded text-[10px] bg-[var(--input-bg)] text-[var(--text-muted)] border border-[var(--border-color)]">
+                    <span
+                      key={tag}
+                      className="px-2 py-0.5 rounded text-[10px] bg-[var(--input-bg)] text-[var(--text-muted)] border border-[var(--border-color)]"
+                    >
                       {tag}
                     </span>
                   ))}
                   <div className="ml-auto flex gap-1.5">
-                    <button className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-[var(--accent-light)] text-[var(--accent)] opacity-60 cursor-not-allowed" disabled>
+                    <button
+                      className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-[var(--accent-light)] text-[var(--accent)] opacity-60 cursor-not-allowed"
+                      disabled
+                    >
                       {t('literature.read')}
                     </button>
-                    <button className="px-2.5 py-1 rounded-lg text-[10px] font-medium border border-[var(--border-color)] text-[var(--text-muted)] opacity-60 cursor-not-allowed" disabled>
+                    <button
+                      className="px-2.5 py-1 rounded-lg text-[10px] font-medium border border-[var(--border-color)] text-[var(--text-muted)] opacity-60 cursor-not-allowed"
+                      disabled
+                    >
                       {t('literature.save')}
                     </button>
                   </div>
@@ -197,5 +234,5 @@ export default function LiteraturePage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

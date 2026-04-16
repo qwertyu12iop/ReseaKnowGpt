@@ -11,4 +11,4 @@ export default {
   'profile.no_activity': 'No conversations yet',
   'profile.interests': 'Tech Interests',
   'profile.learning': 'Learning Progress',
-} as const;
+} as const

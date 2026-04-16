@@ -1,0 +1,38 @@
+---
+description: React / Next.js 组件模式
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# React / Next.js 模式
+
+## 组件结构
+
+```tsx
+// ✅ 标准组件结构
+'use client' // 仅客户端组件需要
+
+import { useState } from 'react'
+import { useI18n } from '@/contexts/I18nContext'
+
+interface FeatureCardProps {
+  title: string
+  onAction: () => void
+}
+
+export function FeatureCard({ title, onAction }: FeatureCardProps) {
+  const { t } = useI18n()
+  const [isOpen, setIsOpen] = useState(false)
+
+  return <div>{title}</div>
+}
+```
+
+## 关键规则
+
+- 默认使用 Server Components，仅在需要交互 / 浏览器 API 时加 `'use client'`
+- 页面文件（`app/*/page.tsx`）保持薄层，主 UI 放 `components/`
+- 状态管理优先级：局部 state → Context → 外部库
+- 表单使用 Server Actions 或受控组件
+- 列表渲染必须提供稳定的 `key`
+- 避免在渲染函数中定义内联函数，使用 `useCallback`

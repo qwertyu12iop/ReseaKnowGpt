@@ -16,4 +16,4 @@ export default {
   'common.back': '返回',
   'common.confirm': '确认',
   'common.cancel': '取消',
-} as const;
+} as const

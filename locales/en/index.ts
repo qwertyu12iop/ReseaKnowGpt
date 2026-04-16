@@ -1,8 +1,8 @@
-import common from './common';
-import chat from './chat';
-import profile from './profile';
-import literature from './literature';
-import workshop from './workshop';
+import common from './common'
+import chat from './chat'
+import profile from './profile'
+import literature from './literature'
+import workshop from './workshop'
 
 const en = {
   ...common,
@@ -10,6 +10,6 @@ const en = {
   ...profile,
   ...literature,
   ...workshop,
-} as const;
+} as const
 
-export default en;
+export default en

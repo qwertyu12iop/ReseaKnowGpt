@@ -1,0 +1,38 @@
+---
+description: ReseaKnowGpt 项目全局约定，所有对话均生效
+alwaysApply: true
+---
+
+# 项目约定
+
+## 技术栈
+
+- **框架**: Next.js 16 (App Router) + React 19 + TypeScript 5
+- **样式**: Tailwind CSS v4（无 tailwind.config，使用 @import "tailwindcss"）
+- **包管理**: 仅使用 pnpm，禁止 npm / yarn
+- **代码规范**: ESLint 9 + Prettier
+- **数据库 / 向量检索**: Supabase（pgvector 相似度检索）
+- **国际化**: 客户端 Context + 静态字典（locales/zh、locales/en）
+
+## 目录结构约定
+
+```
+app/             → Next.js App Router 页面（薄层，仅路由）
+components/      → React 组件（按模块分目录：chat/layout/literature/profile/workshop）
+contexts/        → React Context Providers
+locales/         → 中英文案模块
+types/           → TypeScript 类型定义
+lib/             → 工具函数、Supabase 客户端、API 封装
+hooks/           → 自定义 React Hooks
+services/        → 后端服务调用（LLM、工作流、RAG）
+```
+
+## 编码原则
+
+- 组件使用函数式组件 + Hooks，禁止 class 组件
+- 新建文件统一使用 kebab-case 命名（如 `chat-input.tsx`）
+- 导出组件使用 PascalCase，导出函数使用 camelCase
+- 使用 `@/` 路径别名引用项目文件
+- 每个组件文件只导出一个主组件
+- 业务逻辑抽离到 hooks/ 或 services/，组件只负责 UI 渲染
+- 所有用户可见文案必须走 i18n（`t('key')`）

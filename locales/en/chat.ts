@@ -23,4 +23,4 @@ export default {
   'mode.technical.desc': 'RAG + Official Docs for precise answers',
   'mode.theory.badge': 'Theory',
   'mode.technical.badge': 'Technical',
-} as const;
+} as const

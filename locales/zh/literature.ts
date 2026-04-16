@@ -12,4 +12,4 @@ export default {
   'literature.read': '阅读',
   'literature.save': '收藏',
   'literature.coming': '即将上线',
-} as const;
+} as const

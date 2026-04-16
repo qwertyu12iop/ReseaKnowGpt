@@ -1,32 +1,33 @@
-'use client';
+'use client'
 
-import { useState, useCallback } from 'react';
-import { useConversation } from '@/contexts/ConversationContext';
-import { useI18n } from '@/contexts/I18nContext';
-import ModeSelector from './ModeSelector';
-import MessageList from './MessageList';
-import ChatInput from './ChatInput';
-import WelcomeScreen from './WelcomeScreen';
+import { useState, useCallback } from 'react'
+import { useConversation } from '@/contexts/ConversationContext'
+import { useI18n } from '@/contexts/I18nContext'
+import ModeSelector from './ModeSelector'
+import MessageList from './MessageList'
+import ChatInput from './ChatInput'
+import WelcomeScreen from './WelcomeScreen'
 
 export default function ChatArea() {
-  const { conversations, activeConversationId, mode, isLoading, setMode, sendMessage } = useConversation();
-  const { t } = useI18n();
-  const [promptValue, setPromptValue] = useState('');
+  const { conversations, activeConversationId, mode, isLoading, setMode, sendMessage } =
+    useConversation()
+  const { t } = useI18n()
+  const [promptValue, setPromptValue] = useState('')
 
-  const activeConversation = conversations.find((c) => c.id === activeConversationId) ?? null;
-  const messages = activeConversation?.messages ?? [];
+  const activeConversation = conversations.find((c) => c.id === activeConversationId) ?? null
+  const messages = activeConversation?.messages ?? []
 
   const handleSend = useCallback(
     (content: string) => {
-      setPromptValue('');
-      sendMessage(content);
+      setPromptValue('')
+      sendMessage(content)
     },
-    [sendMessage]
-  );
+    [sendMessage],
+  )
 
   const handlePromptClick = useCallback((prompt: string) => {
-    setPromptValue(prompt);
-  }, []);
+    setPromptValue(prompt)
+  }, [])
 
   return (
     <div className="flex flex-col h-full">
@@ -55,5 +56,5 @@ export default function ChatArea() {
         />
       </div>
     </div>
-  );
+  )
 }

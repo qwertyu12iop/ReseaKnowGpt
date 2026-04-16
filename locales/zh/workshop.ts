@@ -7,4 +7,4 @@ export default {
   'workshop.review': '代码审查',
   'workshop.docs': '文档生成',
   'workshop.coze_powered': '由 Coze 工作流驱动',
-} as const;
+} as const

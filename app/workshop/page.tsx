@@ -1,5 +1,5 @@
-import WorkshopPage from '@/components/workshop/WorkshopPage';
+import WorkshopPage from '@/components/workshop/WorkshopPage'
 
 export default function Workshop() {
-  return <WorkshopPage />;
+  return <WorkshopPage />
 }

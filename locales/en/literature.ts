@@ -12,4 +12,4 @@ export default {
   'literature.read': 'Read',
   'literature.save': 'Save',
   'literature.coming': 'Coming Soon',
-} as const;
+} as const

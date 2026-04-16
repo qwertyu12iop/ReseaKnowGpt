@@ -23,4 +23,4 @@ export default {
   'mode.technical.desc': 'RAG + 官方文档，精准技术解答',
   'mode.theory.badge': '理论',
   'mode.technical.badge': '技术',
-} as const;
+} as const
