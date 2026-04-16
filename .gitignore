@@ -1,2 +1,9 @@
 .pnpm-store/
 .DS_Store
+
+# 依赖在仓库根目录时必须在根 .gitignore 中忽略（子目录里的规则不会作用到根目录）
+node_modules/
+.next/
+out/
+.env*
+*.tsbuildinfo

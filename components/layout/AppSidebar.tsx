@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useI18n } from '@/contexts/I18nContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useConversation } from '@/contexts/ConversationContext';
-import ConversationItem from '@/components/sidebar/ConversationItem';
+import ConversationItem from './ConversationItem';
 
 interface NavItem {
   key: string;
