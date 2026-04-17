@@ -1,17 +1,11 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { translations } from '@/locales'
 import type { Locale, TranslationKey } from '@/locales'
 
 export type { Locale, TranslationKey }
 export { translations }
-
-function getInitialLocale(): Locale {
-  if (typeof window === 'undefined') return 'zh'
-  const saved = localStorage.getItem('locale') as Locale | null
-  return saved === 'zh' || saved === 'en' ? saved : 'zh'
-}
 
 interface I18nContextValue {
   locale: Locale
@@ -22,7 +16,15 @@ interface I18nContextValue {
 const I18nContext = createContext<I18nContextValue | null>(null)
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(getInitialLocale)
+  const [locale, setLocaleState] = useState<Locale>('zh')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('locale') as Locale | null
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydration-safe init from localStorage
+    if (saved === 'zh' || saved === 'en') setLocaleState(saved)
+    setMounted(true)
+  }, [])
 
   const setLocale = useCallback((newLocale: Locale) => {
     setLocaleState(newLocale)
@@ -33,6 +35,8 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     (key: TranslationKey): string => translations[locale][key] as string,
     [locale],
   )
+
+  if (!mounted) return null
 
   return <I18nContext.Provider value={{ locale, setLocale, t }}>{children}</I18nContext.Provider>
 }

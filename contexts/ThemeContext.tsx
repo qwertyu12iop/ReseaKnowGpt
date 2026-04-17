@@ -5,17 +5,6 @@ import { createContext, useContext, useState, useCallback, useEffect } from 'rea
 export type Theme = 'dark' | 'light'
 export type Accent = 'indigo' | 'blue' | 'purple' | 'emerald'
 
-function getInitialTheme(): Theme {
-  if (typeof window === 'undefined') return 'dark'
-  const saved = localStorage.getItem('theme') as Theme | null
-  return saved === 'dark' || saved === 'light' ? saved : 'dark'
-}
-
-function getInitialAccent(): Accent {
-  if (typeof window === 'undefined') return 'indigo'
-  return (localStorage.getItem('accent') as Accent) ?? 'indigo'
-}
-
 interface ThemeContextValue {
   theme: Theme
   setTheme: (theme: Theme) => void
@@ -26,13 +15,22 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(getInitialTheme)
-  const [accent, setAccentState] = useState<Accent>(getInitialAccent)
+  const [theme, setThemeState] = useState<Theme>('dark')
+  const [accent, setAccentState] = useState<Accent>('indigo')
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    document.documentElement.setAttribute('data-accent', accent)
-  }, [theme, accent])
+    const savedTheme = localStorage.getItem('theme') as Theme | null
+    const savedAccent = localStorage.getItem('accent') as Accent | null
+    const t = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'dark'
+    const a = savedAccent ?? 'indigo'
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydration-safe init from localStorage
+    setThemeState(t)
+    setAccentState(a as Accent)
+    document.documentElement.setAttribute('data-theme', t)
+    document.documentElement.setAttribute('data-accent', a)
+    setMounted(true)
+  }, [])
 
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme)
@@ -45,6 +43,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('accent', newAccent)
     document.documentElement.setAttribute('data-accent', newAccent)
   }, [])
+
+  if (!mounted) return null
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, accent, setAccent }}>
