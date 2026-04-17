@@ -31,7 +31,8 @@ export default function ModeSelector({ mode, onChange }: ModeSelectorProps) {
           <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
         </svg>
       ),
-      activeClass: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/40',
+      activeClass:
+        'bg-gradient-to-r from-indigo-500/20 to-violet-500/20 text-indigo-300 border-indigo-400/40 shadow-sm shadow-indigo-500/20',
       inactiveClass:
         'text-[var(--text-muted)] border-transparent hover:bg-[var(--input-bg)] hover:text-[var(--text-secondary)]',
     },
@@ -54,14 +55,15 @@ export default function ModeSelector({ mode, onChange }: ModeSelectorProps) {
           <polyline points="8 6 2 12 8 18" />
         </svg>
       ),
-      activeClass: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40',
+      activeClass:
+        'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-300 border-emerald-400/40 shadow-sm shadow-emerald-500/20',
       inactiveClass:
         'text-[var(--text-muted)] border-transparent hover:bg-[var(--input-bg)] hover:text-[var(--text-secondary)]',
     },
   ]
 
   return (
-    <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--chat-surface)] border border-[var(--border-color)]">
+    <div className="flex items-center gap-1 p-1 rounded-xl glass-panel">
       {modes.map((m) => (
         <button
           key={m.key}

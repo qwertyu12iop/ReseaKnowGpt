@@ -114,21 +114,41 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
 
   return (
     <>
-      {isOpen && <div className="fixed inset-0 bg-black/50 z-20 md:hidden" onClick={onClose} />}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-20 md:hidden"
+          onClick={onClose}
+        />
+      )}
 
       <aside
         className={`
           fixed top-0 left-0 h-full z-30 flex flex-col
-          w-60 bg-[var(--sidebar-bg)] border-r border-[var(--border-color)]
+          w-60 border-r border-[var(--border-color)]
+          bg-[var(--sidebar-bg)]
           transition-transform duration-300 ease-in-out
           md:relative md:translate-x-0 md:z-auto md:shrink-0
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
+        style={{
+          backgroundImage: 'var(--sidebar-gradient)',
+          backgroundRepeat: 'no-repeat',
+        }}
       >
+        {/* soft top glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-24 -left-10 w-60 h-48 rounded-full blur-3xl opacity-50"
+          style={{
+            background:
+              'radial-gradient(closest-side, rgba(129,140,248,0.35), transparent 70%)',
+          }}
+        />
+
         {/* Logo */}
-        <div className="shrink-0 flex items-center justify-between px-4 py-4 border-b border-[var(--border-color)]">
+        <div className="relative shrink-0 flex items-center justify-between px-4 py-4 border-b border-[var(--border-color)]">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow shadow-indigo-500/30">
+            <div className="w-8 h-8 rounded-xl brand-gradient flex items-center justify-center shadow-lg shadow-indigo-500/30 ring-1 ring-white/10">
               <svg
                 width="15"
                 height="15"
@@ -143,7 +163,7 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-bold text-[var(--text-primary)] leading-tight">
+              <p className="text-sm font-bold brand-gradient-text leading-tight">
                 {t('app.name')}
               </p>
               <p className="text-[10px] text-[var(--text-muted)] leading-tight">
@@ -172,7 +192,7 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
         </div>
 
         {/* Primary Navigation — fixed, never scrolls */}
-        <nav className="shrink-0 px-2 py-3 border-b border-[var(--border-color)]">
+        <nav className="relative shrink-0 px-2 py-3 border-b border-[var(--border-color)]">
           {NAV_ITEMS.map((item) => {
             const isActive = item.href !== '#' && pathname === item.href
             return (
@@ -182,16 +202,30 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
                 onClick={() => {
                   if (item.href !== '#') onClose()
                 }}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all duration-150 ${
+                className={`group relative flex items-center gap-3 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all duration-200 ${
                   isActive
-                    ? 'bg-[var(--accent-light)] text-[var(--accent)] font-medium'
+                    ? 'text-[var(--accent)] font-medium bg-gradient-to-r from-indigo-500/15 via-purple-500/10 to-transparent shadow-inner shadow-indigo-500/5'
                     : 'text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                <span className={isActive ? 'text-[var(--accent)]' : ''}>{item.icon}</span>
+                {isActive && (
+                  <span
+                    aria-hidden
+                    className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-gradient-to-b from-indigo-400 to-purple-500"
+                  />
+                )}
+                <span
+                  className={
+                    isActive
+                      ? 'text-[var(--accent)]'
+                      : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
+                  }
+                >
+                  {item.icon}
+                </span>
                 <span className="flex-1">{t(item.key as Parameters<typeof t>[0])}</span>
                 {item.badge === 'new' && (
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-400 uppercase tracking-wide">
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-gradient-to-r from-emerald-400/25 to-teal-400/25 text-emerald-300 uppercase tracking-wide ring-1 ring-emerald-400/25">
                     {t('common.new_badge')}
                   </span>
                 )}
@@ -216,7 +250,7 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
                 newChat()
               }}
               title={t('chat.new')}
-              className="text-[var(--text-muted)] hover:text-[var(--accent)] p-1 rounded transition-colors"
+              className="text-[var(--text-muted)] hover:text-white hover:bg-gradient-to-br hover:from-indigo-500 hover:to-purple-600 p-1 rounded-md transition-all duration-200 hover:shadow-md hover:shadow-indigo-500/30"
             >
               <svg
                 width="14"
@@ -266,7 +300,13 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
         </div>
 
         {/* Bottom: User Info + Theme + Lang — fixed, never scrolls */}
-        <div className="shrink-0 border-t border-[var(--border-color)] p-2 space-y-0.5">
+        <div
+          className="relative shrink-0 border-t border-[var(--border-color)] p-2 space-y-0.5"
+          style={{
+            background:
+              'linear-gradient(0deg, rgba(99,102,241,0.06) 0%, transparent 100%)',
+          }}
+        >
           <UserInfoRow onClose={onClose} />
           <ThemeAndLangRow theme={theme} setTheme={setTheme} />
         </div>

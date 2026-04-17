@@ -54,9 +54,15 @@ export default function ChatInput({ mode, isLoading, initialValue = '', onSend }
   return (
     <div className="px-4 pb-4 pt-2 shrink-0">
       <div className="max-w-3xl mx-auto">
-        <div className="flex items-end gap-3 rounded-2xl border bg-[var(--input-bg)] px-4 py-3 transition-colors duration-200 focus-within:border-[var(--accent)]/50 border-[var(--border-color)]">
+        <div
+          className={`flex items-end gap-3 rounded-2xl border px-4 py-3 transition-all duration-200 glass-panel focus-within:ring-2 focus-within:ring-offset-0 ${
+            isTheory
+              ? 'focus-within:border-indigo-400/50 focus-within:ring-indigo-500/20'
+              : 'focus-within:border-emerald-400/50 focus-within:ring-emerald-500/20'
+          }`}
+        >
           <div
-            className={`shrink-0 mb-1.5 w-2 h-2 rounded-full ${isTheory ? 'bg-indigo-400' : 'bg-emerald-400'}`}
+            className={`shrink-0 mb-1.5 w-2 h-2 rounded-full ${isTheory ? 'bg-indigo-400' : 'bg-emerald-400'} shadow-[0_0_8px_currentColor]`}
           />
 
           <textarea
@@ -77,8 +83,8 @@ export default function ChatInput({ mode, isLoading, initialValue = '', onSend }
             className={`shrink-0 mb-0.5 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
               input.trim() && !isLoading
                 ? isTheory
-                  ? 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-sm shadow-indigo-500/30'
-                  : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm shadow-emerald-500/30'
+                  ? 'bg-gradient-to-br from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 text-white shadow-md shadow-indigo-500/40 hover:shadow-indigo-500/60 hover:-translate-y-0.5'
+                  : 'bg-gradient-to-br from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white shadow-md shadow-emerald-500/40 hover:shadow-emerald-500/60 hover:-translate-y-0.5'
                 : 'bg-[var(--chat-surface)] text-[var(--text-muted)] cursor-not-allowed'
             }`}
           >

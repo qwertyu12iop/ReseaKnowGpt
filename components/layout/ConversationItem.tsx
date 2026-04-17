@@ -19,18 +19,24 @@ export default function ConversationItem({
 }: ConversationItemProps) {
   const isTheory = conversation.mode === 'theory'
   const modeColor = isTheory
-    ? 'bg-indigo-500/20 text-indigo-400'
-    : 'bg-emerald-500/20 text-emerald-400'
+    ? 'bg-gradient-to-br from-indigo-500/25 to-violet-500/25 text-indigo-300 ring-1 ring-indigo-400/25'
+    : 'bg-gradient-to-br from-emerald-500/25 to-teal-500/25 text-emerald-300 ring-1 ring-emerald-400/25'
 
   return (
     <div
       onClick={onClick}
-      className={`group flex items-center gap-2 rounded-lg px-2.5 py-2 cursor-pointer transition-all duration-150 ${
+      className={`group relative flex items-center gap-2 rounded-lg px-2.5 py-2 cursor-pointer transition-all duration-200 ${
         isActive
-          ? 'bg-[var(--accent-light)] text-[var(--text-primary)]'
+          ? 'bg-gradient-to-r from-indigo-500/15 via-purple-500/10 to-transparent text-[var(--text-primary)]'
           : 'hover:bg-[var(--sidebar-hover)] text-[var(--text-secondary)]'
       }`}
     >
+      {isActive && (
+        <span
+          aria-hidden
+          className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-gradient-to-b from-indigo-400 to-purple-500"
+        />
+      )}
       <span className="flex-1 truncate text-xs leading-5">{conversation.title}</span>
       <span className={`shrink-0 rounded px-1 py-0.5 text-[9px] font-medium ${modeColor}`}>
         {isTheory ? '理' : '技'}

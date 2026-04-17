@@ -32,10 +32,15 @@ export default function ChatArea() {
   return (
     <div className="flex flex-col h-full">
       {/* Chat header */}
-      <header className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-[var(--border-color)] bg-[var(--chat-bg)] shrink-0">
-        <span className="text-sm font-medium text-[var(--text-secondary)] truncate max-w-[160px] sm:max-w-xs">
-          {activeConversation ? activeConversation.title : t('chat.new')}
-        </span>
+      <header className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-[var(--border-color)] shrink-0 backdrop-blur-md bg-[var(--chat-bg)]/60 supports-[backdrop-filter]:bg-[var(--chat-bg)]/40">
+        <div className="flex items-center gap-2 min-w-0">
+          <span
+            className={`w-1.5 h-1.5 rounded-full shrink-0 ${mode === 'theory' ? 'bg-indigo-400' : 'bg-emerald-400'} shadow-[0_0_8px_currentColor]`}
+          />
+          <span className="text-sm font-medium text-[var(--text-secondary)] truncate max-w-[160px] sm:max-w-xs">
+            {activeConversation ? activeConversation.title : t('chat.new')}
+          </span>
+        </div>
         <ModeSelector mode={mode} onChange={setMode} />
       </header>
 

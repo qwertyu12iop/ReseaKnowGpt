@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useI18n } from '@/contexts/I18nContext'
 
@@ -13,46 +13,42 @@ export default function LogoutConfirmModal() {
     await signOut()
   }, [signOut, setShowLogoutConfirm])
 
+  useEffect(() => {
+    if (!showLogoutConfirm) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowLogoutConfirm(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [showLogoutConfirm, setShowLogoutConfirm])
+
   if (!showLogoutConfirm) return null
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40"
         onClick={() => setShowLogoutConfirm(false)}
       />
-      <div className="relative w-full max-w-xs mx-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl shadow-2xl p-6 text-center">
-        <div className="mx-auto w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center mb-3">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-red-400"
-          >
-            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
-            <polyline points="16 17 21 12 16 7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg>
+      <div className="relative w-full max-w-[340px] mx-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-xl shadow-xl animate-fade-up backdrop-blur-xl">
+        <div className="px-5 pt-5 pb-4">
+          <h3 className="text-[15px] font-semibold text-[var(--text-primary)]">
+            {t('auth.logout')}
+          </h3>
+          <p className="mt-1.5 text-[13px] leading-relaxed text-[var(--text-secondary)]">
+            {t('auth.logout_confirm')}
+          </p>
         </div>
-        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1">
-          {t('auth.logout')}
-        </h3>
-        <p className="text-xs text-[var(--text-muted)] mb-4">{t('auth.logout_confirm')}</p>
-        <div className="flex gap-2">
+        <div className="flex items-center justify-end gap-2 px-4 py-3 border-t border-[var(--border-color)]">
           <button
             onClick={() => setShowLogoutConfirm(false)}
-            className="flex-1 py-2 rounded-xl text-sm text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] transition-colors"
+            className="px-3.5 h-8 rounded-md text-[13px] text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] hover:text-[var(--text-primary)] transition-colors"
           >
             {t('common.cancel')}
           </button>
           <button
             onClick={handleSignOut}
-            className="flex-1 py-2 rounded-xl text-sm font-medium bg-red-500 hover:bg-red-600 text-white transition-colors"
+            className="px-3.5 h-8 rounded-md text-[13px] font-medium bg-red-500 hover:bg-red-600 text-white transition-colors"
           >
             {t('auth.logout')}
           </button>
