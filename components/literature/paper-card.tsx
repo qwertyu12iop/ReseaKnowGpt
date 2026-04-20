@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { useI18n } from '@/contexts/I18nContext'
+import { useFavorites } from '@/contexts/FavoritesContext'
 import type { Paper } from '@/types/paper'
 
 interface PaperCardProps {
@@ -15,9 +17,22 @@ function formatCitations(n: number): string {
 
 export function PaperCard({ paper, onOpenSummary }: PaperCardProps) {
   const { t, locale } = useI18n()
+  const { isFavorited, toggle } = useFavorites()
+  const [toggling, setToggling] = useState(false)
+  const favorited = isFavorited('paper_catalog', paper.id)
   const authorsText = paper.authors.slice(0, 3).join(', ')
   const moreAuthors = paper.authors.length > 3 ? ` +${paper.authors.length - 3}` : ''
   const targetUrl = paper.pdfUrl ?? paper.url
+
+  const handleToggleFavorite = async () => {
+    if (toggling) return
+    setToggling(true)
+    try {
+      await toggle('paper_catalog', paper.id)
+    } finally {
+      setToggling(false)
+    }
+  }
 
   return (
     <div className="group flex flex-col rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] p-5 hover:border-[var(--accent)]/40 hover:bg-[var(--card-hover)] transition-all duration-200">
@@ -25,6 +40,30 @@ export function PaperCard({ paper, onOpenSummary }: PaperCardProps) {
         <h3 className="flex-1 text-sm font-semibold text-[var(--text-primary)] leading-snug line-clamp-2 group-hover:text-[var(--accent)] transition-colors">
           {paper.title}
         </h3>
+        <button
+          onClick={handleToggleFavorite}
+          disabled={toggling}
+          title={favorited ? t('favorites.remove') : t('favorites.add')}
+          aria-label={favorited ? t('favorites.remove') : t('favorites.add')}
+          className={`shrink-0 w-7 h-7 flex items-center justify-center rounded-lg transition-colors disabled:opacity-50 ${
+            favorited
+              ? 'text-pink-400 hover:bg-pink-500/10'
+              : 'text-[var(--text-muted)] hover:text-pink-400 hover:bg-pink-500/10'
+          }`}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill={favorited ? 'currentColor' : 'none'}
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+          </svg>
+        </button>
         <span
           className={`shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium ${
             paper.source === 'arxiv'

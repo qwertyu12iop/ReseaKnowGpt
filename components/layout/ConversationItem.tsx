@@ -1,6 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { Conversation } from '@/types/chat'
+import { useFavorites } from '@/contexts/FavoritesContext'
+import { useI18n } from '@/contexts/I18nContext'
 
 interface ConversationItemProps {
   conversation: Conversation
@@ -17,10 +20,25 @@ export default function ConversationItem({
   onDelete,
   deleteLabel = '删除',
 }: ConversationItemProps) {
+  const { t } = useI18n()
+  const { isFavorited, toggle } = useFavorites()
+  const [toggling, setToggling] = useState(false)
+  const favorited = isFavorited('conversation', conversation.id)
   const isTheory = conversation.mode === 'theory'
   const modeColor = isTheory
     ? 'bg-gradient-to-br from-indigo-500/25 to-violet-500/25 text-indigo-300 ring-1 ring-indigo-400/25'
     : 'bg-gradient-to-br from-emerald-500/25 to-teal-500/25 text-emerald-300 ring-1 ring-emerald-400/25'
+
+  const handleToggleFavorite = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (toggling) return
+    setToggling(true)
+    try {
+      await toggle('conversation', conversation.id)
+    } finally {
+      setToggling(false)
+    }
+  }
 
   return (
     <div
@@ -41,6 +59,29 @@ export default function ConversationItem({
       <span className={`shrink-0 rounded px-1 py-0.5 text-[9px] font-medium ${modeColor}`}>
         {isTheory ? '理' : '技'}
       </span>
+      <button
+        onClick={handleToggleFavorite}
+        disabled={toggling}
+        className={`shrink-0 p-0.5 rounded transition-all ${
+          favorited
+            ? 'opacity-100 text-pink-400 hover:text-pink-300'
+            : 'opacity-0 group-hover:opacity-100 text-[var(--text-muted)] hover:text-pink-400'
+        }`}
+        title={favorited ? t('favorites.remove') : t('favorites.add')}
+      >
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill={favorited ? 'currentColor' : 'none'}
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+        </svg>
+      </button>
       <button
         onClick={(e) => {
           e.stopPropagation()

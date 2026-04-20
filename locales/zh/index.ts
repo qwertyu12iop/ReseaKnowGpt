@@ -3,6 +3,7 @@ import chat from './chat'
 import profile from './profile'
 import literature from './literature'
 import workshop from './workshop'
+import favorites from './favorites'
 
 const zh = {
   ...common,
@@ -10,6 +11,7 @@ const zh = {
   ...profile,
   ...literature,
   ...workshop,
+  ...favorites,
 } as const
 
 export default zh
