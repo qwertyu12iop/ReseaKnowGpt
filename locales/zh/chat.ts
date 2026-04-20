@@ -23,4 +23,11 @@ export default {
   'mode.technical.desc': 'RAG + 官方文档，精准技术解答',
   'mode.theory.badge': '理论',
   'mode.technical.badge': '技术',
+  'chat.sources.title': '相关文献',
+  'chat.sources.searching': '正在从 OpenAlex 检索真实文献…',
+  'chat.sources.expand': '展开全部',
+  'chat.sources.collapse': '收起',
+  'chat.sources.citations': '次引用',
+  'chat.sources.hint': '由 OpenAlex 学术数据库实时检索，所有链接可点击跳转',
+  'chat.scroll.jump': '回到底部',
 } as const

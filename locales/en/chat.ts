@@ -23,4 +23,11 @@ export default {
   'mode.technical.desc': 'RAG + Official Docs for precise answers',
   'mode.theory.badge': 'Theory',
   'mode.technical.badge': 'Technical',
+  'chat.sources.title': 'Related Papers',
+  'chat.sources.searching': 'Searching real papers on OpenAlex…',
+  'chat.sources.expand': 'Show all',
+  'chat.sources.collapse': 'Collapse',
+  'chat.sources.citations': 'citations',
+  'chat.sources.hint': 'Fetched live from OpenAlex — every link is clickable & verified',
+  'chat.scroll.jump': 'Jump to bottom',
 } as const

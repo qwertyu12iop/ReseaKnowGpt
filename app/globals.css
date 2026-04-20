@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import 'katex/dist/katex.min.css';
+@import 'highlight.js/styles/github-dark.css';
 
 /* ── Dark theme (default) ── */
 :root,
@@ -312,4 +314,116 @@ textarea:focus {
 }
 .prose-bubble em {
   color: var(--text-secondary);
+}
+
+.prose-bubble a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  word-break: break-all;
+}
+.prose-bubble a:hover {
+  color: var(--accent-hover);
+}
+
+.prose-bubble blockquote {
+  margin: 0.6em 0;
+  padding: 0.4em 0.9em;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--text-secondary);
+  border-radius: 0 6px 6px 0;
+}
+.prose-bubble blockquote p {
+  margin: 0.2em 0;
+}
+
+/* Inline code */
+.prose-bubble :not(pre) > code {
+  font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  padding: 0.12em 0.42em;
+  border-radius: 5px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+/* Code block */
+.prose-bubble pre {
+  margin: 0.7em 0;
+  padding: 0.85em 1em;
+  background: rgba(13, 17, 28, 0.85);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 0.85em;
+  line-height: 1.55;
+}
+[data-theme='light'] .prose-bubble pre {
+  background: #1e2230;
+}
+.prose-bubble pre code {
+  background: transparent !important;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+  font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+}
+
+/* GFM table */
+.prose-bubble table {
+  width: 100%;
+  margin: 0.7em 0;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  display: block;
+  overflow-x: auto;
+}
+.prose-bubble th,
+.prose-bubble td {
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+.prose-bubble th {
+  background: var(--input-bg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.prose-bubble tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* GFM task list */
+.prose-bubble input[type='checkbox'] {
+  margin-right: 0.4em;
+  vertical-align: middle;
+  accent-color: var(--accent);
+}
+
+/* Images */
+.prose-bubble img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin: 0.5em 0;
+}
+
+/* KaTeX 行内/块级公式适配气泡内字号与颜色 */
+.prose-bubble .katex {
+  font-size: 1em;
+  color: inherit;
+}
+.prose-bubble .katex-display {
+  margin: 0.6em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2em 0;
 }

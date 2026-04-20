@@ -2,6 +2,8 @@
 
 import { Message } from '@/types/chat'
 import { useI18n } from '@/contexts/I18nContext'
+import MarkdownContent from './MarkdownContent'
+import MessageSources from './MessageSources'
 
 interface MessageBubbleProps {
   message: Message
@@ -64,13 +66,17 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         </div>
 
         <div
-          className={`px-4 py-3 rounded-2xl text-sm leading-relaxed break-words whitespace-pre-wrap backdrop-blur-sm border ${
+          className={`px-4 py-3 rounded-2xl text-sm leading-relaxed break-words backdrop-blur-sm border ${
             isUser
-              ? 'bg-gradient-to-br from-indigo-500/15 to-violet-500/10 border-indigo-400/20 text-[var(--text-primary)] rounded-tr-sm'
+              ? 'whitespace-pre-wrap bg-gradient-to-br from-indigo-500/15 to-violet-500/10 border-indigo-400/20 text-[var(--text-primary)] rounded-tr-sm'
               : 'bg-[var(--chat-surface)] border-[var(--border-color)] text-[var(--text-primary)] rounded-tl-sm shadow-sm'
           }`}
         >
-          {message.content}
+          {isUser ? message.content : <MarkdownContent content={message.content} />}
+          {!isUser &&
+            (message.sourcesLoading || (message.sources && message.sources.length > 0)) && (
+              <MessageSources sources={message.sources} loading={message.sourcesLoading} />
+            )}
         </div>
       </div>
     </div>
