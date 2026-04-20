@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useI18n } from '@/contexts/I18nContext'
+import { useAuth } from '@/contexts/AuthContext'
 import { usePapers } from '@/hooks/use-papers'
 import { CATEGORY_CONFIGS } from '@/lib/literature/categories'
 import type { Paper, PaperCategory } from '@/types/paper'
@@ -16,6 +17,7 @@ const SORT_OPTIONS: Array<{ key: 'citations' | 'year' | 'recent'; zh: string; en
 
 export default function LiteraturePage() {
   const { t, locale } = useI18n()
+  const { requireAuth } = useAuth()
   const {
     items,
     total,
@@ -33,6 +35,11 @@ export default function LiteraturePage() {
   } = usePapers()
 
   const [activePaper, setActivePaper] = useState<Paper | null>(null)
+
+  const handleOpenSummary = (paper: Paper) => {
+    if (!requireAuth()) return
+    setActivePaper(paper)
+  }
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
 
@@ -162,7 +169,7 @@ export default function LiteraturePage() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {items.map((paper) => (
-                <PaperCard key={paper.id} paper={paper} onOpenSummary={setActivePaper} />
+                <PaperCard key={paper.id} paper={paper} onOpenSummary={handleOpenSummary} />
               ))}
             </div>
 
