@@ -1,6 +1,19 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
+export type PaperCategory =
+  | 'ai'
+  | 'systems'
+  | 'algorithms'
+  | 'network'
+  | 'security'
+  | 'theory'
+  | 'database'
+  | 'hci'
+
 export interface Database {
+  __InternalSupabase: {
+    PostgrestVersion: '12'
+  }
   public: {
     Tables: {
       profiles: {
@@ -33,6 +46,7 @@ export interface Database {
           research_field?: string | null
           updated_at?: string
         }
+        Relationships: []
       }
       conversations: {
         Row: {
@@ -56,6 +70,7 @@ export interface Database {
           mode?: 'theory' | 'technical'
           updated_at?: string
         }
+        Relationships: []
       }
       messages: {
         Row: {
@@ -79,6 +94,7 @@ export interface Database {
           content?: string
           sources?: Json
         }
+        Relationships: []
       }
       literature: {
         Row: {
@@ -119,6 +135,7 @@ export interface Database {
           status?: 'pending' | 'processing' | 'ready' | 'error'
           updated_at?: string
         }
+        Relationships: []
       }
       document_chunks: {
         Row: {
@@ -141,19 +158,20 @@ export interface Database {
           metadata?: Json
           embedding?: string | null
         }
+        Relationships: []
       }
       favorites: {
         Row: {
           id: number
           user_id: string
-          item_type: 'literature' | 'conversation' | 'workshop_tool'
+          item_type: 'literature' | 'conversation' | 'workshop_tool' | 'paper_catalog'
           item_id: string
           note: string | null
           created_at: string
         }
         Insert: {
           user_id: string
-          item_type: 'literature' | 'conversation' | 'workshop_tool'
+          item_type: 'literature' | 'conversation' | 'workshop_tool' | 'paper_catalog'
           item_id: string
           note?: string | null
           created_at?: string
@@ -161,8 +179,91 @@ export interface Database {
         Update: {
           note?: string | null
         }
+        Relationships: []
+      }
+      paper_catalog: {
+        Row: {
+          id: number
+          external_id: string
+          source: 'openalex' | 'arxiv' | 'semantic_scholar'
+          title: string
+          authors: string[]
+          abstract: string | null
+          year: number | null
+          venue: string | null
+          doi: string | null
+          url: string
+          pdf_url: string | null
+          category: PaperCategory
+          tags: string[]
+          cited_by_count: number
+          is_open_access: boolean
+          fetched_at: string
+          created_at: string
+        }
+        Insert: {
+          external_id: string
+          source: 'openalex' | 'arxiv' | 'semantic_scholar'
+          title: string
+          authors?: string[]
+          abstract?: string | null
+          year?: number | null
+          venue?: string | null
+          doi?: string | null
+          url: string
+          pdf_url?: string | null
+          category: PaperCategory
+          tags?: string[]
+          cited_by_count?: number
+          is_open_access?: boolean
+          fetched_at?: string
+          created_at?: string
+        }
+        Update: {
+          title?: string
+          authors?: string[]
+          abstract?: string | null
+          year?: number | null
+          venue?: string | null
+          doi?: string | null
+          url?: string
+          pdf_url?: string | null
+          category?: PaperCategory
+          tags?: string[]
+          cited_by_count?: number
+          is_open_access?: boolean
+          fetched_at?: string
+        }
+        Relationships: []
+      }
+      paper_summary: {
+        Row: {
+          paper_id: number
+          summary_zh: string | null
+          summary_en: string | null
+          key_points: Json
+          model: string | null
+          generated_at: string
+        }
+        Insert: {
+          paper_id: number
+          summary_zh?: string | null
+          summary_en?: string | null
+          key_points?: Json
+          model?: string | null
+          generated_at?: string
+        }
+        Update: {
+          summary_zh?: string | null
+          summary_en?: string | null
+          key_points?: Json
+          model?: string | null
+          generated_at?: string
+        }
+        Relationships: []
       }
     }
+    Views: { [_ in never]: never }
     Functions: {
       match_documents: {
         Args: {
@@ -180,5 +281,7 @@ export interface Database {
         }[]
       }
     }
+    Enums: { [_ in never]: never }
+    CompositeTypes: { [_ in never]: never }
   }
 }
