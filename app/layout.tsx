@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import Providers from '@/components/layout/Providers'
 import AppClientLayout from '@/components/layout/AppClientLayout'
+import { getInitialAppData } from '@/lib/auth/initial-data'
 import './globals.css'
 
 const geistSans = Geist({
@@ -19,15 +20,17 @@ export const metadata: Metadata = {
   description: '深度垂直于计算机学科领域的专用智能问答系统',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const initialData = await getInitialAppData()
+
   return (
     <html lang="zh-CN" data-theme="dark">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Providers>
+        <Providers initialData={initialData}>
           <AppClientLayout>{children}</AppClientLayout>
         </Providers>
       </body>

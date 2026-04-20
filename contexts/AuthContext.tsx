@@ -22,14 +22,25 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [profile, setProfile] = useState<Profile | null>(null)
-  const [loading, setLoading] = useState(true)
+interface AuthProviderProps {
+  children: React.ReactNode
+  initialUser?: User | null
+  initialProfile?: Profile | null
+}
+
+export function AuthProvider({
+  children,
+  initialUser = null,
+  initialProfile = null,
+}: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(initialUser)
+  const [profile, setProfile] = useState<Profile | null>(initialProfile)
+  // 若 SSR 已经把用户拿到了，就不再显示 loading 状态
+  const [loading, setLoading] = useState(!initialUser)
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
   const supabaseRef = useRef(createClient())
-  const profileFetchedRef = useRef<string | null>(null)
+  const profileFetchedRef = useRef<string | null>(initialUser ? initialUser.id : null)
 
   const fetchProfile = useCallback(
     async (userId: string) => {

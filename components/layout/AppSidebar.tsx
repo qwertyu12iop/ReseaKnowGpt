@@ -107,6 +107,7 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
   const {
     conversations,
     activeConversationId,
+    isFetchingConversations,
     setActiveConversationId,
     deleteConversation,
     newChat,
@@ -273,7 +274,9 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
             </button>
           </div>
           <div className="flex-1 overflow-y-auto px-2 pb-2">
-            {conversations.length === 0 ? (
+            {isFetchingConversations && conversations.length === 0 ? (
+              <ConversationSkeleton />
+            ) : conversations.length === 0 ? (
               <p className="text-center text-[var(--text-muted)] text-xs mt-6 px-2">
                 {t('chat.empty')}
               </p>
@@ -483,6 +486,32 @@ function UserInfoRow({ onClose }: { onClose: () => void }) {
           <line x1="21" y1="12" x2="9" y2="12" />
         </svg>
       </button>
+    </div>
+  )
+}
+
+function ConversationSkeleton() {
+  return (
+    <div className="mt-2 space-y-3">
+      {[0, 1].map((g) => (
+        <div key={g} className="space-y-1">
+          <div className="px-2 h-3 w-16 rounded bg-[var(--sidebar-hover)] animate-pulse" />
+          <div className="space-y-1.5">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[var(--sidebar-hover)]/60"
+              >
+                <div
+                  className="h-3 rounded bg-[var(--border-color)] animate-pulse flex-1"
+                  style={{ maxWidth: `${60 + ((i * 13) % 40)}%` }}
+                />
+                <div className="h-3 w-4 rounded bg-[var(--border-color)] animate-pulse" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
