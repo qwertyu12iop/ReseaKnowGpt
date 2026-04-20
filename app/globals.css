@@ -108,6 +108,28 @@
   box-sizing: border-box;
 }
 
+/* Clickable elements use pointer cursor by default (Tailwind v4 no longer sets this) */
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']),
+a[href],
+summary,
+label[for],
+select:not(:disabled),
+input[type='button']:not(:disabled),
+input[type='submit']:not(:disabled),
+input[type='reset']:not(:disabled),
+input[type='checkbox']:not(:disabled),
+input[type='radio']:not(:disabled),
+input[type='file']:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled,
+[role='button'][aria-disabled='true'],
+button[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
 html,
 body {
   margin: 0;

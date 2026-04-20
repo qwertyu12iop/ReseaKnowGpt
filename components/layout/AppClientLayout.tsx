@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { ConversationProvider } from '@/contexts/ConversationContext'
 import AppSidebar from './AppSidebar'
 
@@ -33,7 +34,11 @@ export default function AppClientLayout({ children }: { children: React.ReactNod
                 <line x1="3" y1="18" x2="21" y2="18" />
               </svg>
             </button>
-            <div className="flex items-center gap-2">
+            <Link
+              href="/chat"
+              className="flex items-center gap-2 rounded-lg -mx-1 px-1 py-0.5 hover:bg-[var(--sidebar-hover)] transition-colors"
+              aria-label="ReseaKnowGPT"
+            >
               <div className="w-6 h-6 rounded-lg brand-gradient flex items-center justify-center ring-1 ring-white/10 shadow shadow-indigo-500/30">
                 <svg
                   width="11"
@@ -49,7 +54,7 @@ export default function AppClientLayout({ children }: { children: React.ReactNod
                 </svg>
               </div>
               <span className="text-sm font-semibold brand-gradient-text">ReseaKnowGPT</span>
-            </div>
+            </Link>
           </div>
           <main className="flex-1 min-h-0 overflow-hidden">{children}</main>
         </div>

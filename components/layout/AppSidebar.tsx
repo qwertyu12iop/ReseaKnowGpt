@@ -147,7 +147,12 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
 
         {/* Logo */}
         <div className="relative shrink-0 flex items-center justify-between px-4 py-4 border-b border-[var(--border-color)]">
-          <div className="flex items-center gap-2.5">
+          <Link
+            href="/chat"
+            onClick={onClose}
+            className="flex items-center gap-2.5 rounded-lg -m-1 p-1 hover:bg-[var(--sidebar-hover)] transition-colors"
+            aria-label={t('app.name')}
+          >
             <div className="w-8 h-8 rounded-xl brand-gradient flex items-center justify-center shadow-lg shadow-indigo-500/30 ring-1 ring-white/10">
               <svg
                 width="15"
@@ -170,7 +175,7 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
                 {t('app.subtitle')}
               </p>
             </div>
-          </div>
+          </Link>
           <button
             onClick={onClose}
             className="md:hidden text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1 rounded transition-colors"
