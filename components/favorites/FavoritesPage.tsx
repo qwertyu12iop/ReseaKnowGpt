@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useI18n } from '@/contexts/I18nContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { useFavorites } from '@/contexts/FavoritesContext'
@@ -9,11 +9,11 @@ import { FavoriteCard } from './favorite-card'
 
 type TabKey = 'all' | FavoriteItemType
 
-const TABS: Array<{ key: TabKey; labelKey: string }> = [
+/** 始终展示；工坊收藏无前端入口时多为 0，有数据再显示对应 Tab */
+const BASE_TABS: Array<{ key: TabKey; labelKey: string }> = [
   { key: 'all', labelKey: 'favorites.tab.all' },
   { key: 'paper_catalog', labelKey: 'favorites.tab.paper' },
   { key: 'conversation', labelKey: 'favorites.tab.conversation' },
-  { key: 'literature', labelKey: 'favorites.tab.literature' },
 ]
 
 export default function FavoritesPage() {
@@ -40,7 +40,6 @@ export default function FavoritesPage() {
       all: entries.length,
       paper_catalog: 0,
       conversation: 0,
-      literature: 0,
       workshop_tool: 0,
     }
     for (const e of entries) {
@@ -48,6 +47,18 @@ export default function FavoritesPage() {
     }
     return base
   }, [entries])
+
+  const visibleTabs = useMemo(() => {
+    const tabs = [...BASE_TABS]
+    if (counts.workshop_tool > 0) {
+      tabs.push({ key: 'workshop_tool', labelKey: 'favorites.tab.workshop' })
+    }
+    return tabs
+  }, [counts.workshop_tool])
+
+  useEffect(() => {
+    if (tab === 'workshop_tool' && counts.workshop_tool === 0) setTab('all')
+  }, [tab, counts.workshop_tool])
 
   const handleRemove = async (entry: FavoriteEntry) => {
     const ok = window.confirm(t('favorites.delete_confirm'))
@@ -121,7 +132,7 @@ export default function FavoritesPage() {
 
           {/* Tabs */}
           <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
-            {TABS.map((item) => (
+            {visibleTabs.map((item) => (
               <button
                 key={item.key}
                 onClick={() => setTab(item.key)}

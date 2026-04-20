@@ -96,82 +96,18 @@ export interface Database {
         }
         Relationships: []
       }
-      literature: {
-        Row: {
-          id: number
-          user_id: string
-          title: string
-          authors: string[]
-          abstract: string | null
-          tags: string[]
-          file_path: string | null
-          file_size: number | null
-          page_count: number | null
-          status: 'pending' | 'processing' | 'ready' | 'error'
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          user_id: string
-          title: string
-          authors?: string[]
-          abstract?: string | null
-          tags?: string[]
-          file_path?: string | null
-          file_size?: number | null
-          page_count?: number | null
-          status?: 'pending' | 'processing' | 'ready' | 'error'
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          title?: string
-          authors?: string[]
-          abstract?: string | null
-          tags?: string[]
-          file_path?: string | null
-          file_size?: number | null
-          page_count?: number | null
-          status?: 'pending' | 'processing' | 'ready' | 'error'
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      document_chunks: {
-        Row: {
-          id: number
-          literature_id: number
-          content: string
-          metadata: Json
-          embedding: string | null
-          created_at: string
-        }
-        Insert: {
-          literature_id: number
-          content: string
-          metadata?: Json
-          embedding?: string | null
-          created_at?: string
-        }
-        Update: {
-          content?: string
-          metadata?: Json
-          embedding?: string | null
-        }
-        Relationships: []
-      }
       favorites: {
         Row: {
           id: number
           user_id: string
-          item_type: 'literature' | 'conversation' | 'workshop_tool' | 'paper_catalog'
+          item_type: 'conversation' | 'workshop_tool' | 'paper_catalog'
           item_id: string
           note: string | null
           created_at: string
         }
         Insert: {
           user_id: string
-          item_type: 'literature' | 'conversation' | 'workshop_tool' | 'paper_catalog'
+          item_type: 'conversation' | 'workshop_tool' | 'paper_catalog'
           item_id: string
           note?: string | null
           created_at?: string
@@ -264,23 +200,7 @@ export interface Database {
       }
     }
     Views: { [_ in never]: never }
-    Functions: {
-      match_documents: {
-        Args: {
-          query_embedding: string
-          match_threshold?: number
-          match_count?: number
-          filter_literature_id?: number | null
-        }
-        Returns: {
-          id: number
-          content: string
-          metadata: Json
-          literature_id: number
-          similarity: number
-        }[]
-      }
-    }
+    Functions: { [_ in never]: never }
     Enums: { [_ in never]: never }
     CompositeTypes: { [_ in never]: never }
   }

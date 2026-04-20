@@ -1,6 +1,6 @@
 import type { PaperCategory } from '@/types/paper'
 
-export type FavoriteItemType = 'paper_catalog' | 'conversation' | 'literature' | 'workshop_tool'
+export type FavoriteItemType = 'paper_catalog' | 'conversation' | 'workshop_tool'
 
 export interface FavoriteRecord {
   id: number
@@ -33,14 +33,6 @@ export interface FavoriteConversationDetail {
   updatedAt: string
 }
 
-export interface FavoriteLiteratureDetail {
-  kind: 'literature'
-  title: string
-  authors: string[]
-  abstract: string | null
-  tags: string[]
-}
-
 export interface FavoriteWorkshopDetail {
   kind: 'workshop_tool'
   title: string
@@ -49,7 +41,6 @@ export interface FavoriteWorkshopDetail {
 export type FavoriteDetail =
   | FavoritePaperDetail
   | FavoriteConversationDetail
-  | FavoriteLiteratureDetail
   | FavoriteWorkshopDetail
 
 export interface FavoriteEntry extends FavoriteRecord {

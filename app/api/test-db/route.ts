@@ -5,18 +5,18 @@ export async function GET() {
   try {
     const supabase = await createClient()
 
-    // 1. 测试连接：查询 profiles 表结构
     const { data: profiles, error: profilesErr } = await supabase.from('profiles').select('*')
 
-    // 2. 测试连接：查询 conversations 表
     const { data: conversations, error: convsErr } = await supabase
       .from('conversations')
       .select('*')
 
-    // 3. 测试连接：查询 literature 表
-    const { data: literature, error: litErr } = await supabase.from('literature').select('*')
+    const { data: papers, error: papersErr } = await supabase.from('paper_catalog').select('id')
 
-    // 4. 测试连接：查询 favorites 表
+    const { data: summaries, error: summariesErr } = await supabase
+      .from('paper_summary')
+      .select('paper_id')
+
     const { data: favorites, error: favErr } = await supabase.from('favorites').select('*')
 
     return NextResponse.json({
@@ -33,7 +33,16 @@ export async function GET() {
           count: conversations?.length ?? 0,
           error: convsErr?.message,
         },
-        literature: { connected: !litErr, count: literature?.length ?? 0, error: litErr?.message },
+        paper_catalog: {
+          connected: !papersErr,
+          count: papers?.length ?? 0,
+          error: papersErr?.message,
+        },
+        paper_summary: {
+          connected: !summariesErr,
+          count: summaries?.length ?? 0,
+          error: summariesErr?.message,
+        },
         favorites: { connected: !favErr, count: favorites?.length ?? 0, error: favErr?.message },
       },
     })

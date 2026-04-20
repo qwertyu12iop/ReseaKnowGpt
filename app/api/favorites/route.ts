@@ -11,12 +11,7 @@ import type {
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-const VALID_ITEM_TYPES: FavoriteItemType[] = [
-  'paper_catalog',
-  'conversation',
-  'literature',
-  'workshop_tool',
-]
+const VALID_ITEM_TYPES: FavoriteItemType[] = ['paper_catalog', 'conversation', 'workshop_tool']
 
 function isItemType(value: string): value is FavoriteItemType {
   return (VALID_ITEM_TYPES as string[]).includes(value)
@@ -47,27 +42,24 @@ export async function GET(request: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
   const rows = favRows ?? []
+  // 兼容旧库：literature 等已弃用的 item_type 不返回给客户端
+  const validRows = rows.filter((row) => isItemType(row.item_type))
 
   // 按 item_type 分桶，批量拉取详情
   const paperIds = new Set<number>()
   const conversationIds = new Set<string>()
-  const literatureIds = new Set<number>()
 
-  for (const row of rows) {
+  for (const row of validRows) {
     if (row.item_type === 'paper_catalog') paperIds.add(Number(row.item_id))
     else if (row.item_type === 'conversation') conversationIds.add(row.item_id)
-    else if (row.item_type === 'literature') literatureIds.add(Number(row.item_id))
   }
 
-  const [papersRes, conversationsRes, literatureRes] = await Promise.all([
+  const [papersRes, conversationsRes] = await Promise.all([
     paperIds.size > 0
       ? supabase.from('paper_catalog').select('*').in('id', Array.from(paperIds))
       : Promise.resolve({ data: [] as unknown[], error: null }),
     conversationIds.size > 0
       ? supabase.from('conversations').select('*').in('id', Array.from(conversationIds))
-      : Promise.resolve({ data: [] as unknown[], error: null }),
-    literatureIds.size > 0
-      ? supabase.from('literature').select('*').in('id', Array.from(literatureIds))
       : Promise.resolve({ data: [] as unknown[], error: null }),
   ])
 
@@ -100,25 +92,12 @@ export async function GET(request: Request) {
     })
   }
 
-  const litMap = new Map<number, FavoriteDetail>()
-  for (const l of (literatureRes.data ?? []) as Array<Record<string, unknown>>) {
-    litMap.set(Number(l.id), {
-      kind: 'literature',
-      title: String(l.title ?? ''),
-      authors: Array.isArray(l.authors) ? (l.authors as string[]) : [],
-      abstract: (l.abstract as string | null) ?? null,
-      tags: Array.isArray(l.tags) ? (l.tags as string[]) : [],
-    })
-  }
-
-  const items: FavoriteEntry[] = rows.map((row) => {
+  const items: FavoriteEntry[] = validRows.map((row) => {
     let detail: FavoriteDetail | null = null
     if (row.item_type === 'paper_catalog') {
       detail = paperMap.get(Number(row.item_id)) ?? null
     } else if (row.item_type === 'conversation') {
       detail = convMap.get(row.item_id) ?? null
-    } else if (row.item_type === 'literature') {
-      detail = litMap.get(Number(row.item_id)) ?? null
     } else if (row.item_type === 'workshop_tool') {
       detail = { kind: 'workshop_tool', title: row.item_id }
     }

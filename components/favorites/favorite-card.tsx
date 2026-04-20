@@ -33,8 +33,6 @@ export function FavoriteCard({ entry, onRemove }: FavoriteCardProps) {
         return t('favorites.type.paper')
       case 'conversation':
         return t('favorites.type.conversation')
-      case 'literature':
-        return t('favorites.type.literature')
       case 'workshop_tool':
         return t('favorites.type.workshop')
     }
@@ -46,8 +44,6 @@ export function FavoriteCard({ entry, onRemove }: FavoriteCardProps) {
         return 'bg-indigo-500/15 text-indigo-400 border-indigo-500/25'
       case 'conversation':
         return 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25'
-      case 'literature':
-        return 'bg-orange-500/15 text-orange-400 border-orange-500/25'
       case 'workshop_tool':
         return 'bg-purple-500/15 text-purple-400 border-purple-500/25'
     }
@@ -96,7 +92,6 @@ export function FavoriteCard({ entry, onRemove }: FavoriteCardProps) {
 
       {detail?.kind === 'paper_catalog' && <PaperBody detail={detail} />}
       {detail?.kind === 'conversation' && <ConversationBody detail={detail} />}
-      {detail?.kind === 'literature' && <LiteratureBody detail={detail} />}
 
       <div className="flex items-center gap-2 flex-wrap mt-auto pt-3">
         <span className="text-[10px] text-[var(--text-muted)]">
@@ -191,25 +186,6 @@ function ConversationBody({
       </span>
       {locale === 'zh' ? '更新于' : 'Updated'} · {formatDate(detail.updatedAt, locale)}
     </p>
-  )
-}
-
-function LiteratureBody({
-  detail,
-}: {
-  detail: Extract<FavoriteEntry['detail'], { kind: 'literature' }>
-}) {
-  return (
-    <>
-      <p className="text-xs text-[var(--text-muted)] mb-2 line-clamp-1">
-        {detail.authors.slice(0, 3).join(', ')}
-      </p>
-      {detail.abstract && (
-        <p className="text-xs text-[var(--text-secondary)] leading-relaxed line-clamp-3">
-          {detail.abstract}
-        </p>
-      )}
-    </>
   )
 }
 
