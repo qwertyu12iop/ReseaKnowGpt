@@ -5,7 +5,7 @@ export type { PaperCategory }
 export interface Paper {
   id: number
   externalId: string
-  source: 'openalex' | 'arxiv' | 'semantic_scholar'
+  source: 'openalex' | 'arxiv' | 'semantic_scholar' | 'chinaxiv'
   title: string
   authors: string[]
   abstract: string | null

@@ -80,6 +80,8 @@ export interface OpenAlexSearchOptions {
   perPage?: number
   sort?: 'relevance' | 'cited_by_count' | 'publication_date'
   minYear?: number
+  /** 限定论文语言，如 'zh'（中文）、'en'（英文）。不传则不限制。 */
+  language?: string
   signal?: AbortSignal
 }
 
@@ -88,6 +90,7 @@ export async function searchOpenAlex({
   perPage = 5,
   sort = 'relevance',
   minYear,
+  language,
   signal,
 }: OpenAlexSearchOptions): Promise<Source[]> {
   if (!query.trim()) return []
@@ -107,7 +110,12 @@ export async function searchOpenAlex({
     select:
       'id,doi,title,display_name,abstract_inverted_index,publication_year,authorships,primary_location,best_oa_location,open_access,cited_by_count,concepts',
   })
-  if (minYear) params.set('filter', `from_publication_date:${minYear}-01-01`)
+
+  const filters: string[] = []
+  if (minYear) filters.push(`from_publication_date:${minYear}-01-01`)
+  if (language) filters.push(`language:${language}`)
+  if (filters.length) params.set('filter', filters.join(','))
+
   if (mailto) params.set('mailto', mailto)
 
   const url = `${OPENALEX_BASE}/works?${params.toString()}`
@@ -165,6 +173,7 @@ export async function searchOpenAlexCatalog({
   perPage = 10,
   sort = 'cited_by_count',
   minYear,
+  language,
   signal,
 }: OpenAlexSearchOptions): Promise<OpenAlexCatalogItem[]> {
   if (!query.trim()) return []
@@ -184,7 +193,13 @@ export async function searchOpenAlexCatalog({
     select:
       'id,doi,title,display_name,abstract_inverted_index,publication_year,authorships,primary_location,best_oa_location,open_access,cited_by_count,concepts',
   })
-  if (minYear) params.set('filter', `from_publication_date:${minYear}-01-01`)
+
+  // 拼装 filter 参数：支持时间范围 + 语言过滤
+  const filters: string[] = []
+  if (minYear) filters.push(`from_publication_date:${minYear}-01-01`)
+  if (language) filters.push(`language:${language}`)
+  if (filters.length) params.set('filter', filters.join(','))
+
   if (mailto) params.set('mailto', mailto)
 
   const res = await fetch(`${OPENALEX_BASE}/works?${params.toString()}`, {

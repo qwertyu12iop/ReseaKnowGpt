@@ -121,7 +121,7 @@ export interface Database {
         Row: {
           id: number
           external_id: string
-          source: 'openalex' | 'arxiv' | 'semantic_scholar'
+          source: 'openalex' | 'arxiv' | 'semantic_scholar' | 'chinaxiv'
           title: string
           authors: string[]
           abstract: string | null
@@ -139,7 +139,7 @@ export interface Database {
         }
         Insert: {
           external_id: string
-          source: 'openalex' | 'arxiv' | 'semantic_scholar'
+          source: 'openalex' | 'arxiv' | 'semantic_scholar' | 'chinaxiv'
           title: string
           authors?: string[]
           abstract?: string | null
