@@ -3,13 +3,13 @@
 import { useState, useCallback } from 'react'
 import { useI18n } from '@/contexts/I18nContext'
 import WorkshopToolBase, { type HistoryItem } from './WorkshopToolBase'
+import { streamWorkshop } from '@/services/workshop'
 
 export default function LanguageSwitchTool() {
-  const { t, locale } = useI18n()
+  const { t } = useI18n()
   const [output, setOutput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [copied, setCopied] = useState(false)
   const [history, setHistory] = useState<HistoryItem[]>([])
 
   const handleSwitch = useCallback(
@@ -17,26 +17,15 @@ export default function LanguageSwitchTool() {
       setLoading(true)
       setError('')
       setOutput('')
-      setCopied(false)
 
       try {
-        const res = await fetch('/api/workshop/language-switch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lang, code }),
+        const result = await streamWorkshop({
+          path: '/api/workshop/language-switch',
+          body: { lang, code },
+          onDelta: (chunk) => {
+            setOutput((prev) => prev + chunk)
+          },
         })
-
-        if (!res.ok) {
-          const data = (await res.json().catch(() => ({}))) as { error?: string }
-          throw new Error(
-            data.error || (locale === 'zh' ? `请求失败：${res.status}` : `Request failed: ${res.status}`)
-          )
-        }
-
-        const data = (await res.json()) as { output?: string }
-        const result = data.output ?? ''
-        setOutput(result)
-        setCopied(false)
 
         if (result) {
           setHistory((prev) => [
@@ -44,13 +33,13 @@ export default function LanguageSwitchTool() {
             ...prev.slice(0, 9),
           ])
         }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : t('workshop.langswitch.error'))
+      } catch {
+        setError('failed')
       } finally {
         setLoading(false)
       }
     },
-    [t, locale]
+    []
   )
 
   return (
@@ -86,13 +75,13 @@ export default function LanguageSwitchTool() {
       emptyText={t('workshop.langswitch.empty_result')}
       clearText={t('workshop.langswitch.clear')}
       historyText={t('workshop.langswitch.history')}
+      errorText={t('workshop.langswitch.error')}
       maxLines={500}
       onSubmit={handleSwitch}
       history={history}
       loading={loading}
       output={output}
       error={error}
-      copied={copied}
     />
   )
 }

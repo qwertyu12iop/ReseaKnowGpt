@@ -198,9 +198,82 @@ export interface Database {
         }
         Relationships: []
       }
+      crawl_sources: {
+        Row: {
+          id: number
+          url: string
+          title: string | null
+          status: string
+          chunk_count: number
+          error_message: string | null
+          crawled_at: string | null
+          created_at: string
+        }
+        Insert: {
+          url: string
+          title?: string | null
+          status?: string
+          chunk_count?: number
+          error_message?: string | null
+          crawled_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          url?: string
+          title?: string | null
+          status?: string
+          chunk_count?: number
+          error_message?: string | null
+          crawled_at?: string | null
+        }
+        Relationships: []
+      }
+      document_chunks: {
+        Row: {
+          id: number
+          content: string
+          metadata: Json
+          embedding: string | null
+          source_url: string | null
+          source_title: string | null
+          created_at: string
+        }
+        Insert: {
+          content: string
+          metadata?: Json
+          embedding?: string | null
+          source_url?: string | null
+          source_title?: string | null
+          created_at?: string
+        }
+        Update: {
+          content?: string
+          metadata?: Json
+          embedding?: string | null
+          source_url?: string | null
+          source_title?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: { [_ in never]: never }
-    Functions: { [_ in never]: never }
+    Functions: {
+      match_documents: {
+        Args: {
+          query_embedding: string
+          match_threshold?: number
+          match_count?: number
+        }
+        Returns: {
+          id: number
+          content: string
+          metadata: Json
+          source_url: string | null
+          source_title: string | null
+          similarity: number
+        }[]
+      }
+    }
     Enums: { [_ in never]: never }
     CompositeTypes: { [_ in never]: never }
   }

@@ -12,6 +12,7 @@ interface ChatInputProps {
 }
 
 export default function ChatInput({ mode, isLoading, initialValue = '', onSend }: ChatInputProps) {
+  const isComposingRef = useRef(false)
   const { t } = useI18n()
   const [input, setInput] = useState(initialValue)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -40,6 +41,10 @@ export default function ChatInput({ mode, isLoading, initialValue = '', onSend }
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    // 中文输入法等场景下，首次 Enter 用于上屏，不应触发发送
+    if (isComposingRef.current || e.nativeEvent.isComposing || e.keyCode === 229) {
+      return
+    }
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSend()
@@ -70,6 +75,12 @@ export default function ChatInput({ mode, isLoading, initialValue = '', onSend }
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
+            onCompositionStart={() => {
+              isComposingRef.current = true
+            }}
+            onCompositionEnd={() => {
+              isComposingRef.current = false
+            }}
             placeholder={placeholder}
             disabled={isLoading}
             rows={1}

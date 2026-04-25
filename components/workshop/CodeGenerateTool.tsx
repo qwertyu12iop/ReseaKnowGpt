@@ -2,14 +2,14 @@
 
 import { useState, useCallback } from 'react'
 import { useI18n } from '@/contexts/I18nContext'
-import WorkshopToolBase, { LANGUAGES, type HistoryItem } from './WorkshopToolBase'
+import WorkshopToolBase, { type HistoryItem } from './WorkshopToolBase'
+import { streamWorkshop } from '@/services/workshop'
 
 export default function CodeGenerateTool() {
-  const { t, locale } = useI18n()
+  const { t } = useI18n()
   const [output, setOutput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [copied, setCopied] = useState(false)
   const [history, setHistory] = useState<HistoryItem[]>([])
 
   const handleGenerate = useCallback(
@@ -17,26 +17,15 @@ export default function CodeGenerateTool() {
       setLoading(true)
       setError('')
       setOutput('')
-      setCopied(false)
 
       try {
-        const res = await fetch('/api/workshop/code-generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lang, req }),
+        const result = await streamWorkshop({
+          path: '/api/workshop/code-generate',
+          body: { lang, req },
+          onDelta: (chunk) => {
+            setOutput((prev) => prev + chunk)
+          },
         })
-
-        if (!res.ok) {
-          const data = (await res.json().catch(() => ({}))) as { error?: string }
-          throw new Error(
-            data.error || (locale === 'zh' ? `请求失败：${res.status}` : `Request failed: ${res.status}`)
-          )
-        }
-
-        const data = (await res.json()) as { output?: string }
-        const result = data.output ?? ''
-        setOutput(result)
-        setCopied(false)
 
         if (result) {
           setHistory((prev) => [
@@ -44,13 +33,13 @@ export default function CodeGenerateTool() {
             ...prev.slice(0, 9),
           ])
         }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : t('workshop.codegen.error'))
+      } catch {
+        setError('failed')
       } finally {
         setLoading(false)
       }
     },
-    [t]
+    []
   )
 
   return (
@@ -85,13 +74,13 @@ export default function CodeGenerateTool() {
       emptyText={t('workshop.codegen.empty_result')}
       clearText={t('workshop.codegen.clear')}
       historyText={t('workshop.codegen.history')}
+      errorText={t('workshop.codegen.error')}
       maxLines={0}
       onSubmit={handleGenerate}
       history={history}
       loading={loading}
       output={output}
       error={error}
-      copied={copied}
     />
   )
 }

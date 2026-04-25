@@ -1,14 +1,23 @@
 export default {
   'workshop.title': 'Code Workshop',
-  'workshop.subtitle': 'AI coding assistant powered by Coze workflow',
+  'workshop.subtitle': 'AI coding assistant powered by Coze workflow, boosting your productivity',
   'workshop.coming_soon': 'Coming Soon',
   'workshop.generate': 'Code Generator',
-  'workshop.debug': 'Smart Debugger',
   'workshop.language': 'Language Switch',
-  'workshop.docs': 'Doc Generator',
   'workshop.coze_powered': 'Powered by Coze Workflow',
   'workshop.try_now': 'Try Now',
   'workshop.back_to_workshop': 'Back to Workshop',
+
+  'workshop.features.title': 'Why Code Workshop?',
+  'workshop.features.quality.title': 'High Quality',
+  'workshop.features.quality.desc': 'Powered by DeepSeek-V3 for industry-standard clean code',
+  'workshop.features.workflow.title': 'Efficient Workflow',
+  'workshop.features.workflow.desc': 'One-stop solution from requirements to generation and language conversion',
+  'workshop.features.logic.title': 'Robust Logic',
+  'workshop.features.logic.desc': 'Handles edge cases automatically for production-ready code',
+
+  'workshop.languages.title': 'Multi-Language Support',
+  'workshop.languages.subtitle': 'Supporting mainstream and research-focused languages',
 
   'workshop.codegen.title': 'Code Generator',
   'workshop.codegen.desc': 'Describe your needs, choose a language, and AI generates quality code for you',

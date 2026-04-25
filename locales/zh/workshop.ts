@@ -1,14 +1,23 @@
 export default {
   'workshop.title': '代码小工坊',
-  'workshop.subtitle': '基于 Coze 工作流的智能编程助手，覆盖代码全生命周期',
+  'workshop.subtitle': '基于 Coze 工作流的智能编程助手，助力高效开发',
   'workshop.coming_soon': '敬请期待',
   'workshop.generate': '代码生成',
-  'workshop.debug': '智能调试',
   'workshop.language': '语言切换',
-  'workshop.docs': '文档生成',
   'workshop.coze_powered': '由 Coze 工作流驱动',
   'workshop.try_now': '立即体验',
   'workshop.back_to_workshop': '返回工坊',
+
+  'workshop.features.title': '为什么选择代码小工坊？',
+  'workshop.features.quality.title': '高质量生成',
+  'workshop.features.quality.desc': '基于 DeepSeek-V3 模型，生成符合行业标准的规范代码',
+  'workshop.features.workflow.title': '高效工作流',
+  'workshop.features.workflow.desc': '从需求描述到代码生成再到语言转换，提供一站式编程解决方案',
+  'workshop.features.logic.title': '逻辑严密',
+  'workshop.features.logic.desc': '自动处理边界情况，确保生成代码的健壮性与可用性',
+
+  'workshop.languages.title': '广泛的语言支持',
+  'workshop.languages.subtitle': '涵盖主流开发语言与科研常用工具',
 
   'workshop.codegen.title': '代码生成',
   'workshop.codegen.desc': '描述你的需求，选择编程语言，AI 为你生成高质量代码',

@@ -41,13 +41,13 @@ interface WorkshopToolBaseProps {
   emptyText: string
   clearText: string
   historyText: string
+  errorText: string
   maxLines?: number
   onSubmit: (lang: string, input: string) => Promise<void>
   history: HistoryItem[]
   loading: boolean
   output: string
   error: string
-  copied: boolean
 }
 
 export default function WorkshopToolBase({
@@ -67,19 +67,20 @@ export default function WorkshopToolBase({
   emptyText,
   clearText,
   historyText,
+  errorText,
   maxLines = 0,
   onSubmit,
   history,
   loading,
   output,
   error,
-  copied,
 }: WorkshopToolBaseProps) {
   const { t, locale } = useI18n()
   const [lang, setLang] = useState('')
   const [input, setInput] = useState('')
   const [showHistory, setShowHistory] = useState(false)
   const [inputError, setInputError] = useState('')
+  const [copied, setCopied] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const handleInputChange = useCallback(
@@ -110,6 +111,8 @@ export default function WorkshopToolBase({
     if (!output) return
     try {
       await navigator.clipboard.writeText(output)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     } catch {
       /* clipboard not available */
     }
@@ -438,7 +441,46 @@ export default function WorkshopToolBase({
 
               {/* Result content */}
               <div className="flex-1 overflow-auto">
-                {loading ? (
+                {error ? (
+                  <div className="flex flex-col items-center justify-center h-full gap-5 py-20 px-6 animate-fade-in">
+                    <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 shadow-sm">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                      </svg>
+                    </div>
+                    <div className="text-center space-y-2">
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">
+                        {errorText}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleSubmit}
+                      className="mt-2 px-6 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 text-xs font-medium border border-red-500/20 transition-all duration-200"
+                    >
+                      {locale === 'zh' ? '重新尝试' : 'Try Again'}
+                    </button>
+                  </div>
+                ) : output || (loading && output) ? (
+                  <div className="relative">
+                    <pre className="p-5 text-sm font-mono text-[var(--text-primary)] whitespace-pre-wrap animate-fade-in">
+                      <code>{output}</code>
+                      {loading && (
+                        <span className="inline-block w-1.5 h-4 ml-1 bg-[var(--accent)] animate-pulse align-middle" />
+                      )}
+                    </pre>
+                  </div>
+                ) : loading ? (
                   <div className="flex flex-col items-center justify-center h-full gap-4 py-20">
                     <div className="relative w-12 h-12">
                       <div className="absolute inset-0 rounded-full border-2 border-[var(--border-color)]" />
@@ -463,45 +505,6 @@ export default function WorkshopToolBase({
                       </span>
                     </div>
                   </div>
-                ) : error ? (
-                  <div className="flex flex-col items-center justify-center h-full gap-5 py-20 px-6 animate-fade-in">
-                    <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 shadow-sm">
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="12" />
-                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                      </svg>
-                    </div>
-                    <div className="text-center space-y-2">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">
-                        {locale === 'zh' ? '处理出错' : 'Error Occurred'}
-                      </p>
-                      <p className="text-xs text-red-400/90 text-center max-w-xs leading-relaxed">
-                        {error}
-                      </p>
-                    </div>
-                    {error && (
-                      <button
-                        onClick={handleSubmit}
-                        className="mt-2 px-6 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 text-xs font-medium border border-red-500/20 transition-all duration-200"
-                      >
-                        {locale === 'zh' ? '重新尝试' : 'Try Again'}
-                      </button>
-                    )}
-                  </div>
-                ) : output ? (
-                  <pre className="p-5 text-sm leading-relaxed font-mono text-[var(--text-primary)] whitespace-pre-wrap break-words selection:bg-[var(--accent)]/20">
-                    <code>{output}</code>
-                  </pre>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full gap-4 py-20 px-6">
                     <div

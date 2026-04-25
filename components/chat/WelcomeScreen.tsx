@@ -45,7 +45,7 @@ export default function WelcomeScreen({ mode, onPromptClick }: WelcomeScreenProp
   const prompts = PROMPTS[mode][locale]
 
   return (
-    <div className="relative flex flex-col items-center justify-center h-full px-4 py-8 text-center">
+    <div className="relative flex min-h-full flex-col items-center justify-center px-4 py-8 text-center">
       {/* Logo with animated glow */}
       <div className="relative mb-6">
         <div

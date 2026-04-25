@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { streamDeepSeekChat, type ChatCompletionMessage } from '@/lib/llm/deepseek'
-import { getSystemPrompt } from '@/services/prompt-templates'
+import { getSystemPrompt, buildRagSystemPrompt } from '@/services/prompt-templates'
+import { searchSimilarChunks, buildRagContext, extractSourceUrls } from '@/services/rag-pipeline'
 import type { ChatMode } from '@/types/chat'
 
 export const runtime = 'nodejs'
@@ -34,8 +35,31 @@ export async function POST(request: Request) {
 
   const trimmed = incoming.slice(-HISTORY_LIMIT).filter((m) => m && typeof m.content === 'string')
 
+  let systemPrompt: string
+
+  if (mode === 'technical') {
+    const lastUserMsg = trimmed.filter((m) => m.role === 'user').at(-1)?.content ?? ''
+    try {
+      const chunks = await searchSimilarChunks(lastUserMsg, {
+        matchThreshold: 0.35,
+        matchCount: 6,
+      })
+      console.log(`[RAG] 检索到 ${chunks.length} 个相关片段 (query: "${lastUserMsg.slice(0, 40)}...")`)
+      const ragContext = buildRagContext(chunks)
+      const sourceUrls = extractSourceUrls(chunks)
+      systemPrompt = ragContext
+        ? buildRagSystemPrompt(ragContext, sourceUrls)
+        : getSystemPrompt(mode)
+    } catch (err) {
+      console.error('[RAG] 检索失败，回退到普通模式:', err)
+      systemPrompt = getSystemPrompt(mode)
+    }
+  } else {
+    systemPrompt = getSystemPrompt(mode)
+  }
+
   const messages: ChatCompletionMessage[] = [
-    { role: 'system', content: getSystemPrompt(mode) },
+    { role: 'system', content: systemPrompt },
     ...trimmed.map<ChatCompletionMessage>((m) => ({
       role: m.role,
       content: m.content,

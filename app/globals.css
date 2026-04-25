@@ -370,10 +370,15 @@ textarea:focus {
   background: transparent !important;
   border: 0;
   padding: 0;
-  color: inherit;
   font-size: inherit;
   font-family:
     ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+}
+.prose-bubble pre code.hljs {
+  color: #c9d1d9;
+}
+[data-theme='light'] .prose-bubble pre code.hljs {
+  color: #c9d1d9;
 }
 
 /* GFM table */

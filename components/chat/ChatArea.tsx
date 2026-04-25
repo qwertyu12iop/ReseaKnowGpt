@@ -9,7 +9,7 @@ import ChatInput from './ChatInput'
 import WelcomeScreen from './WelcomeScreen'
 
 export default function ChatArea() {
-  const { conversations, activeConversationId, mode, isLoading, setMode, sendMessage } =
+  const { conversations, activeConversationId, mode, isLoading, setMode, sendMessage, newChat } =
     useConversation()
   const { t } = useI18n()
   const [promptValue, setPromptValue] = useState('')
@@ -29,19 +29,31 @@ export default function ChatArea() {
     setPromptValue(prompt)
   }, [])
 
+  const handleModeChange = useCallback(
+    (nextMode: typeof mode) => {
+      if (nextMode === mode) return
+      setMode(nextMode)
+      setPromptValue('')
+      newChat()
+    },
+    [mode, newChat, setMode],
+  )
+
   return (
     <div className="flex flex-col h-full">
       {/* Chat header */}
-      <header className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-[var(--border-color)] shrink-0 backdrop-blur-md bg-[var(--chat-bg)]/60 supports-[backdrop-filter]:bg-[var(--chat-bg)]/40">
-        <div className="flex items-center gap-2 min-w-0">
+      <header className="relative z-10 flex min-h-12 shrink-0 flex-row items-center justify-between gap-2 border-b border-[var(--border-color)] bg-[var(--chat-bg)] px-4 py-2.5 sm:min-h-14 sm:px-6 sm:py-3">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
           <span
-            className={`w-1.5 h-1.5 rounded-full shrink-0 ${mode === 'theory' ? 'bg-indigo-400' : 'bg-emerald-400'} shadow-[0_0_8px_currentColor]`}
+            className={`h-1.5 w-1.5 shrink-0 rounded-full ${mode === 'theory' ? 'bg-indigo-400' : 'bg-emerald-400'} shadow-[0_0_8px_currentColor]`}
           />
-          <span className="text-sm font-medium text-[var(--text-secondary)] truncate max-w-[160px] sm:max-w-xs">
+          <span className="min-w-0 truncate text-sm font-medium text-[var(--text-secondary)] sm:max-w-xs">
             {activeConversation ? activeConversation.title : t('chat.new')}
           </span>
         </div>
-        <ModeSelector mode={mode} onChange={setMode} />
+        <div className="shrink-0">
+          <ModeSelector mode={mode} onChange={handleModeChange} />
+        </div>
       </header>
 
       {/* Messages or welcome */}
