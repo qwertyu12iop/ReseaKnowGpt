@@ -155,7 +155,7 @@ export function ConversationProvider({
   const sendMessage = useCallback(
     async (content: string) => {
       if (isLoading) return
-      if (!requireAuth()) return
+      if (!requireAuth() || !user) return
 
       setIsLoading(true)
 
