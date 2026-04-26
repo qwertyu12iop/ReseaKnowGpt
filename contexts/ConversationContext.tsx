@@ -40,7 +40,7 @@ export function ConversationProvider({
   const [activeConversationId, setActiveConversationIdState] = useState<string | null>(null)
   const [mode, setMode] = useState<ChatMode>('theory')
   const [isLoading, setIsLoading] = useState(false)
-  const { user } = useAuth()
+  const { user, requireAuth } = useAuth()
 
   const supabaseRef = useRef(createClient())
   // 跟踪当前会话列表所属的用户，避免对相同用户重复拉取
@@ -154,7 +154,8 @@ export function ConversationProvider({
 
   const sendMessage = useCallback(
     async (content: string) => {
-      if (!user || isLoading) return
+      if (isLoading) return
+      if (!requireAuth()) return
 
       setIsLoading(true)
 
@@ -392,7 +393,7 @@ export function ConversationProvider({
         setIsLoading(false)
       }
     },
-    [activeConversationId, isLoading, mode, user],
+    [activeConversationId, isLoading, mode, user, requireAuth],
   )
 
   return (

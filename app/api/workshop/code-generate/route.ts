@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createCozeStream, missingCredentials } from '@/lib/coze-stream'
+import { runCozeWorkflow, missingCredentials } from '@/lib/coze-stream'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -29,15 +29,16 @@ export async function POST(request: Request) {
     return missingCredentials()
   }
 
-  try {
-    return await createCozeStream({
-      workflowId,
-      apiKey,
-      parameters: { lang, req },
-      tag: 'CodeGenerate',
-    }).run()
-  } catch (err) {
-    console.error('[CodeGenerate] Unexpected error:', err)
-    return NextResponse.json({ error: 'service_unavailable' }, { status: 500 })
+  const result = await runCozeWorkflow({
+    workflowId,
+    apiKey,
+    parameters: { lang, req },
+    tag: 'CodeGenerate',
+  })
+
+  if (result.error) {
+    return NextResponse.json({ error: result.error }, { status: result.status })
   }
+
+  return NextResponse.json({ output: result.output })
 }
