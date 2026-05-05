@@ -30,4 +30,5 @@ export default {
   'auth.loading': 'Please wait...',
   'auth.logout': 'Sign Out',
   'auth.logout_confirm': 'Are you sure you want to sign out?',
+  'nav.admin': 'Admin',
 } as const

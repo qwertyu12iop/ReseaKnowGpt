@@ -79,7 +79,6 @@ export default function AuthModal() {
       />
 
       <div className="relative w-full max-w-sm mx-4 glass-strong border border-[var(--border-strong)] rounded-3xl shadow-2xl shadow-indigo-500/10 overflow-hidden animate-fade-up">
-        {/* decorative glows */}
         <div
           aria-hidden
           className="pointer-events-none absolute -top-24 -left-10 w-64 h-64 rounded-full blur-3xl animate-blob"
@@ -99,47 +98,27 @@ export default function AuthModal() {
         />
 
         <div className="relative">
-          {/* Close Button */}
           <button
             onClick={() => setShowAuthModal(false)}
             className="absolute top-3 right-3 z-10 p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/5 transition-colors"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
 
-          {/* Header */}
           <div className="px-6 pt-9 pb-4 text-center">
             <div className="mx-auto w-14 h-14 rounded-2xl brand-gradient flex items-center justify-center shadow-xl shadow-indigo-500/40 ring-1 ring-white/15 mb-4">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
               </svg>
             </div>
             <h2 className="text-lg font-bold brand-gradient-text">{t('app.name')}</h2>
-            <p className="text-xs text-[var(--text-muted)] mt-1">{t('auth.welcome')}</p>
+            <p className="text-xs text-[var(--text-muted)] mt-1">
+              {t('auth.welcome')}
+            </p>
           </div>
 
-          {/* Tab Switch */}
           <div className="flex mx-6 mb-4 rounded-xl bg-black/10 dark:bg-white/5 p-1 ring-1 ring-[var(--border-color)]">
             <button
               onClick={() => switchTab('login')}
@@ -163,7 +142,6 @@ export default function AuthModal() {
             </button>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="px-6 pb-8 space-y-3">
             {tab === 'register' && (
               <div>
@@ -190,6 +168,7 @@ export default function AuthModal() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('auth.email_placeholder')}
                 required
+                autoComplete="username"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--input-bg)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]/60 focus:ring-2 focus:ring-indigo-500/20 transition-all"
               />
             </div>
@@ -205,24 +184,15 @@ export default function AuthModal() {
                 placeholder={t('auth.password_placeholder')}
                 required
                 minLength={6}
+                autoComplete={tab === 'register' ? 'new-password' : 'current-password'}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--input-bg)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]/60 focus:ring-2 focus:ring-indigo-500/20 transition-all"
               />
             </div>
 
             {error && (
               <div className="px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30 text-xs text-red-400 flex items-start gap-2">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="shrink-0 mt-0.5"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="shrink-0 mt-0.5">
+                  <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
                 <span>{error}</span>
               </div>

@@ -30,4 +30,5 @@ export default {
   'auth.loading': '请稍候...',
   'auth.logout': '退出登录',
   'auth.logout_confirm': '确定要退出登录吗？',
+  'nav.admin': '管理后台',
 } as const

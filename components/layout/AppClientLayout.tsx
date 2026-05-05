@@ -2,10 +2,18 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import AppSidebar from './AppSidebar'
 
 export default function AppClientLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const pathname = usePathname()
+
+  const isAdminRoute = pathname.startsWith('/admin')
+
+  if (isAdminRoute) {
+    return <>{children}</>
+  }
 
   return (
     <>

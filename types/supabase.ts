@@ -16,6 +16,39 @@ export interface Database {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          id: number
+          email: string
+          password_hash: string
+          nickname: string
+          role: 'admin' | 'super_admin'
+          is_active: boolean
+          last_login_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          email: string
+          password_hash: string
+          nickname?: string
+          role?: 'admin' | 'super_admin'
+          is_active?: boolean
+          last_login_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          email?: string
+          password_hash?: string
+          nickname?: string
+          role?: 'admin' | 'super_admin'
+          is_active?: boolean
+          last_login_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           id: string
@@ -271,6 +304,18 @@ export interface Database {
           source_url: string | null
           source_title: string | null
           similarity: number
+        }[]
+      }
+      verify_admin_login: {
+        Args: {
+          p_email: string
+          p_password: string
+        }
+        Returns: {
+          id: number
+          email: string
+          nickname: string
+          role: string
         }[]
       }
     }

@@ -4,6 +4,7 @@ import profile from './profile'
 import literature from './literature'
 import workshop from './workshop'
 import favorites from './favorites'
+import admin from './admin'
 
 const zh = {
   ...common,
@@ -12,6 +13,7 @@ const zh = {
   ...literature,
   ...workshop,
   ...favorites,
+  ...admin,
 } as const
 
 export default zh

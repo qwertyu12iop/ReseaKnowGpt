@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useI18n } from '@/contexts/I18nContext'
@@ -13,6 +13,7 @@ interface NavItem {
   href: string
   icon: React.ReactNode
   badge?: 'new' | 'soon'
+  adminOnly?: boolean
 }
 
 const NAV_ITEMS: NavItem[] = [
@@ -92,6 +93,28 @@ const NAV_ITEMS: NavItem[] = [
       </svg>
     ),
   },
+  {
+    key: 'nav.admin',
+    href: '/admin',
+    adminOnly: true,
+    icon: (
+      <svg
+        width="17"
+        height="17"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="3" y="3" width="7" height="7" />
+        <rect x="14" y="3" width="7" height="7" />
+        <rect x="14" y="14" width="7" height="7" />
+        <rect x="3" y="14" width="7" height="7" />
+      </svg>
+    ),
+  },
 ]
 
 interface AppSidebarProps {
@@ -111,6 +134,17 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
     deleteConversation,
     newChat,
   } = useConversation()
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    setIsAdmin(!!localStorage.getItem('admin_token'))
+
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'admin_token') setIsAdmin(!!e.newValue)
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
 
   return (
     <>
@@ -198,7 +232,7 @@ export default function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
 
         {/* Primary Navigation — fixed, never scrolls */}
         <nav className="relative shrink-0 px-2 py-3 border-b border-[var(--border-color)]">
-          {NAV_ITEMS.map((item) => {
+          {NAV_ITEMS.filter((item) => !item.adminOnly || isAdmin).map((item) => {
             const isActive = item.href !== '#' && pathname === item.href
             return (
               <Link
@@ -414,34 +448,104 @@ import { useAuth } from '@/contexts/AuthContext'
 import { Conversation } from '@/types/chat'
 import { TranslationKey } from '@/contexts/I18nContext'
 
+interface AdminInfo {
+  id: number
+  email: string
+  nickname: string
+  role: string
+}
+
 function UserInfoRow({ onClose }: { onClose: () => void }) {
   const pathname = usePathname()
   const { t } = useI18n()
   const { user, profile, setShowAuthModal, setShowLogoutConfirm } = useAuth()
+  const [adminInfo, setAdminInfo] = useState<AdminInfo | null>(null)
+
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem('admin_token')
+      const info = localStorage.getItem('admin_info')
+      if (token && info) {
+        setAdminInfo(JSON.parse(info))
+      } else {
+        setAdminInfo(null)
+      }
+    } catch {
+      setAdminInfo(null)
+    }
+
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'admin_token' || e.key === 'admin_info') {
+        try {
+          const token = localStorage.getItem('admin_token')
+          const info = localStorage.getItem('admin_info')
+          if (token && info) {
+            setAdminInfo(JSON.parse(info))
+          } else {
+            setAdminInfo(null)
+          }
+        } catch {
+          setAdminInfo(null)
+        }
+      }
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
+  if (!user && adminInfo) {
+    const avatarLetter = adminInfo.nickname[0].toUpperCase()
+    return (
+      <div className="flex items-center gap-2 px-1">
+        <Link
+          href="/admin"
+          onClick={onClose}
+          className="flex-1 flex items-center gap-2.5 px-2 py-2 rounded-lg text-sm transition-all duration-150 min-w-0 text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] hover:text-[var(--text-primary)]"
+        >
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+            {avatarLetter}
+          </div>
+          <div className="flex flex-col min-w-0">
+            <span className="truncate text-xs font-medium">{adminInfo.nickname}</span>
+            <span className="truncate text-[10px] text-[var(--text-muted)]">{t('nav.admin')}</span>
+          </div>
+        </Link>
+      </div>
+    )
+  }
 
   if (!user) {
     return (
-      <button
-        onClick={() => setShowAuthModal(true)}
-        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] hover:text-[var(--text-primary)] transition-all duration-150 w-full"
-      >
-        <div className="w-7 h-7 rounded-full bg-[var(--input-bg)] flex items-center justify-center">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
-        </div>
-        <span>{t('auth.login')}</span>
-      </button>
+      <div className="space-y-0.5">
+        <button
+          onClick={() => setShowAuthModal(true)}
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] hover:text-[var(--text-primary)] transition-all duration-150 w-full"
+        >
+          <div className="w-7 h-7 rounded-full bg-[var(--input-bg)] flex items-center justify-center">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <span>{t('auth.login')}</span>
+        </button>
+        <Link
+          href="/admin/login"
+          onClick={onClose}
+          className="flex items-center justify-center px-3 py-1 text-[10px] text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+        >
+          {t('admin.login')}
+        </Link>
+      </div>
     )
   }
 
